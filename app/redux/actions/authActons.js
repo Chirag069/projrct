@@ -26,30 +26,32 @@ export const LoggedLoadingAction =
     });
   };
 
-export const LoggedAction = () => async dispatch => {
-  try {
-    const value = await AsyncStorage.getItem('token');
-    if (value) {
-      dispatch({
-        type: LOGGED,
-        payload: value,
-      });
-    } else {
-    }
-  } catch (error) {
-    Toast.show({
-      text1: 'server response fail',
-      visibilityTime: 3000,
-      autoHide: true,
-      position: 'top',
-      type: 'error',
+export const LoggedAction =
+  (usertoken = '') =>
+  async dispatch => {
+    // try {
+    //   const value = await AsyncStorage.getItem('@user_token');
+    //   if (value) {
+    dispatch({
+      type: LOGGED,
+      payload: usertoken,
     });
-  }
-};
+    //   } else {
+    //   }
+    // } catch (error) {
+    //   Toast.show({
+    //     text1: 'server response fail',
+    //     visibilityTime: 3000,
+    //     autoHide: true,
+    //     position: 'top',
+    //     type: 'error',
+    //   });
+    // }
+  };
 
 export const authLogOutAction = () => async dispatch => {
   try {
-    await AsyncStorage.removeItem('token');
+    await AsyncStorage.removeItem('@user_token');
   } catch (e) {
     console.log(e);
   }
@@ -71,8 +73,8 @@ export const userLoginAction =
     myHeaders.append('Content-Type', 'application/json');
 
     var raw = JSON.stringify({
-      username: 'developer',
-      password: '8128421663',
+      username: userName,
+      password: userPassword,
     });
 
     var requestOptions = {
@@ -81,22 +83,22 @@ export const userLoginAction =
       body: raw,
       redirect: 'follow',
     };
+
     fetch('https://nts.dhyaravi.com/outward_ipa/register/login', requestOptions)
       .then(response => response.json())
       .then(result => {
         let serverResponse = result;
         dispatch(authLoadingAction());
         if (serverResponse.status == true) {
-          let userToken = serverResponse.token;
-          try {
-            AsyncStorage.setItem('token', userToken);
-          } catch (error) {
-            console.log(error);
+          if (serverResponse && serverResponse.token) {
+            (async () => {
+              await AsyncStorage.setItem('@user_token', serverResponse.token);
+            })();
           }
 
           dispatch({
             type: USER_LOGIN,
-            payload: userToken,
+            payload: serverResponse.token,
           });
 
           Toast.show({
