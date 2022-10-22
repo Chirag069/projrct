@@ -8,3 +8,4 @@ export const LOGGED_LOADING = 'LOGGED_LOADING';
 
 export const QRDATA = 'QRDATA';
 export const QRLOADING = 'QRLOADING';
+export const QRLIST = 'QRLIST';

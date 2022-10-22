@@ -1,4 +1,4 @@
-import {QRDATA, QRLOADING} from './types';
+import {QRDATA, QRLOADING, QRLIST} from './types';
 import Toast from 'react-native-toast-message';
 
 export const qrLoadingAction =
@@ -7,6 +7,15 @@ export const qrLoadingAction =
     dispatch({
       type: QRLOADING,
       payload: loading,
+    });
+  };
+
+export const qrListAction =
+  (qrdata = '') =>
+  dispatch => {
+    dispatch({
+      type: QRLIST,
+      payload: qrdata,
     });
   };
 
@@ -34,12 +43,12 @@ export const qrdataAction =
       .then(response => response.json())
       .then(result => {
         let serverResponse = result;
-        console.log(serverResponse);
+
         dispatch(qrLoadingAction());
         if (serverResponse?.success == 1) {
           dispatch({
             type: QRDATA,
-            payload: serverResponse,
+            payload: serverResponse.data,
           });
 
           // Toast.show({
