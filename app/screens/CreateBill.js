@@ -5,6 +5,7 @@ import {
   FlatList,
   ActivityIndicator,
   ScrollView,
+  LogBox,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {TextInput} from 'react-native-paper';
@@ -12,7 +13,7 @@ import {scale, verticalScale, moderateScale} from 'react-native-size-matters';
 import CustomButton from '../components/Custom/CustomButton';
 import {useDispatch, useSelector} from 'react-redux';
 import {qrdataAction, qrListAction} from '../redux/actions/QrcodeAction';
-
+import {LoggedAction} from '../redux/actions/authActons';
 import {userLoginAction} from '../redux/actions/authActons';
 
 const CreateBill = () => {
@@ -21,34 +22,28 @@ const CreateBill = () => {
   const {Token} = useSelector(state => state.authState);
   const {qrdata, qrLoading, qrrr} = useSelector(state => state.qrState);
 
-  // console.log(qrdata);
+  useEffect(() => {
+    LogBox.ignoreLogs([' Encountered two children with the same key']);
+  }, []);
 
-  // const sameqrdata = qrdata.find(value => value.product_id===);
-  // console.log(sameqrdata.product_id);
+  const newArray = qrdata.reduce((acc, dt) => {
+    const formatedDate = dt.product_id;
 
-  // const data = qrdata
-  //   .map
-  //   // item => console.log(item.product_id, qrrr.product_id),
-  //   // === qrrr.product_id
-  //   //   ? {...item, pieces: item.pieces * 2}
-  //   //   : item,
-  //   ();
-  // console.log(data);
+    const dateAcc = acc[formatedDate];
 
-  // const qrd = qrdata.map(function (item) {
-  //   return item.product_id == qrrr.product_id ? item.pieces * 2 : item;
-  // });
-
-  qrdata.forEach(function (item, i) {
-    if (qrdata.length == 0) {
-      return item;
+    if (!dateAcc) {
+      acc[formatedDate] = {
+        productid: formatedDate,
+        value: [dt],
+      };
     } else {
-      if (qrrr.product_id == item.product_id)
-        qrdata[i].pieces = qrdata[i].pieces * 2;
+      acc[formatedDate].value.push(dt);
     }
-  });
-  console.log(qrdata);
-  // console.log(qrd);
+    return acc;
+  }, {});
+
+  const aaa = Object.values(newArray);
+
   return (
     <>
       {qrLoading ? (
@@ -89,7 +84,6 @@ const CreateBill = () => {
                 fontSize={scale(17)}
                 onPress={() => {
                   dispatch(qrdataAction(Token, qrcode));
-                  // setLiked([...liked, index]);
                 }}
               />
             </View>
@@ -102,7 +96,7 @@ const CreateBill = () => {
                 height: verticalScale(490),
               }}
               contentContainerStyle={{}}
-              data={qrdata}
+              data={aaa}
               horizontal={false}
               numColumns={1}
               keyExtractor={item => {
@@ -114,15 +108,11 @@ const CreateBill = () => {
               renderItem={post => {
                 const item = post?.item;
                 const index = item?.id;
-                var a = item?.pieces;
-                var b = item?.price;
-                const c = a * b;
 
-                // console.log(item.product_id, qrrr.product_id);
-                // if (item.product_id === qrrr.product_id) {
-                //   [...item, (pieces = item.pieces * 2)];
-                // } else {
-                // }
+                const productlen = Object.keys(item.value).length;
+                var a = item.value[0].pieces * productlen;
+                var b = item.value[0].price;
+                const c = a * b;
 
                 return (
                   <View
@@ -153,7 +143,7 @@ const CreateBill = () => {
 
                           fontWeight: 'bold',
                         }}>
-                        Product Name :- {item?.pname}
+                        Product Name :- {item.value[0].pname}
                       </Text>
                     </View>
 
@@ -166,7 +156,7 @@ const CreateBill = () => {
                             fontWeight: 'bold',
                             marginBottom: verticalScale(5),
                           }}>
-                          Color :-{item?.color}
+                          Color :-{item.value[0].color}
                         </Text>
 
                         <Text
@@ -176,7 +166,7 @@ const CreateBill = () => {
                             fontWeight: 'bold',
                             marginBottom: verticalScale(5),
                           }}>
-                          Piece :- {item?.pieces}
+                          Piece :- {item.value[0].pieces * productlen}
                         </Text>
                       </View>
 
@@ -187,7 +177,7 @@ const CreateBill = () => {
                           marginBottom: verticalScale(5),
                           fontWeight: 'bold',
                         }}>
-                        Price :- {item?.price}
+                        Price :- {item.value[0].price}
                       </Text>
                       <Text
                         style={{

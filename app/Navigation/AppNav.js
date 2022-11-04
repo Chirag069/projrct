@@ -16,25 +16,22 @@ const AppNav = () => {
   const dispatch = useDispatch();
   const {loggedLoading, Token} = useSelector(state => state.authState);
 
-  // useEffect(() => {
-
-  //   // dispatch(LoggedLoadingAction(true));
-  // }, []);
   console.log(Token);
 
   useEffect(() => {
-    // dispatch(LoggedAction());
     (async () => {
       const userToken = await AsyncStorage.getItem('@user_token');
-      // console.log(userToken);
       try {
         dispatch(LoggedAction(userToken));
       } catch (e) {
         console.log(e);
       }
     })();
-    dispatch(LoggedAction());
   }, [dispatch]);
+
+  // useEffect(() => {
+  //   dispatch(LoggedAction());
+  // }, [dispatch]);
 
   return (
     <>

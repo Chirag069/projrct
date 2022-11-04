@@ -20,7 +20,7 @@ export const qrListAction =
   };
 
 export const qrdataAction =
-  (userToken = '', barcode = '') =>
+  (userToken = '', barcode = '', qrdata = '') =>
   dispatch => {
     dispatch(qrLoadingAction(true));
     var myHeaders = new Headers();

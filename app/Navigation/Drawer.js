@@ -16,7 +16,7 @@ const Drawer = createDrawerNavigator();
 export default function App() {
   return (
     <Drawer.Navigator
-      initialRouteName="Home"
+      initialRouteName="CreateBill"
       drawerContent={props => <CustomDrawer {...props} />}
       screenOptions={{
         drawerItemStyle: {

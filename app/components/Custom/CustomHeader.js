@@ -127,9 +127,9 @@ const CustomHeader = () => {
           source={require('../../assets/Images/Raging-Gold.png')}
         />
       </View>
-      <TouchableOpacity onPress={() => setModalVisible(true)}>
+      {/* <TouchableOpacity onPress={() => setModalVisible(true)}>
         <AntDesign name="search1" size={scale(25)} color="white" />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };

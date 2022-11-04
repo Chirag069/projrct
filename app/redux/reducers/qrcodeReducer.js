@@ -12,15 +12,20 @@ export default (state = initialState, action) => {
     case QRDATA:
       return {
         ...state,
+
         qrdata: [...new Set([action.payload, ...state.qrdata])],
-        qrrr: action.payload,
-        // qrdata: state.qrdata.map(
-        //   item =>
-        //     // item.product_id === action.payload.product_id
-        //     // item
-        //     [...new Set([action.payload, ...state.qrdata])],
-        //   // : {...item, pieces: action.payload},
-        // ),
+        //  state.qrdata.map(item =>
+        //     item.product_id === action.payload.product_id
+        //       ? [...new Set([...state.qrdata])]
+        //       : [...new Set([action.payload, ...state.qrdata])],
+        //   ),
+
+        qrrr: state.qrdata.map(item =>
+          item.product_id === action.payload.product_id
+            ? [...new Set([...state.qrdata])]
+            : [...new Set([action.payload, ...state.qrdata])],
+        ),
+        // [...state.qrdata],
       };
     case QRLOADING:
       return {

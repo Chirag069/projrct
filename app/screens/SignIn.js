@@ -64,7 +64,7 @@ const SignIn = () => {
         </View>
         <View style={{marginHorizontal: 20, marginVertical: 30}}>
           <TextInput
-            label="Mobile No."
+            label="User Name"
             style={{backgroundColor: 'white', fontSize: scale(13)}}
             onChangeText={setEmailInput}
             value={emailInput}
