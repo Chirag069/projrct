@@ -29,8 +29,6 @@ export const LoggedLoadingAction =
 export const LoggedAction =
   (usertoken = '') =>
   async dispatch => {
-    console.log(usertoken);
-
     dispatch(LoggedLoadingAction(false));
     dispatch({
       type: LOGGED,
@@ -41,7 +39,6 @@ export const LoggedAction =
 export const authLogOutAction = () => async dispatch => {
   try {
     await AsyncStorage.removeItem('@user_token');
-    // dispatch(LoggedAction(null));
   } catch (e) {
     console.log(e);
   }

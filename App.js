@@ -17,10 +17,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <StatusBar backgroundColor={'#c79248'} />
-      {/* <Index /> */}
-      <NavigationContainer>
-        <AppNav />
-      </NavigationContainer>
+      <Index />
       <Toast />
     </Provider>
   );

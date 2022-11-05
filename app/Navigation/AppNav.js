@@ -18,12 +18,9 @@ const AppNav = () => {
     state => state.authState,
   );
 
-  console.log(Token);
-
   useEffect(() => {
     (async () => {
       const userToken = await AsyncStorage.getItem('@user_token');
-      console.log(userToken);
       try {
         dispatch(LoggedAction(userToken));
       } catch (e) {
