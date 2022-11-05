@@ -70,10 +70,7 @@ const CustomDrawer = props => {
         <TouchableOpacity
           onPress={() => {
             dispatch(authLogOutAction());
-            props.navigation.reset({
-              index: 0,
-              routes: [{name: 'Home'}],
-            });
+            dispatch(LoggedAction(null));
           }}
           style={{}}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>

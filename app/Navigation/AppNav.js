@@ -5,7 +5,7 @@ import {scale, verticalScale, moderateScale} from 'react-native-size-matters';
 import {useSelector, useDispatch} from 'react-redux';
 import {LoggedAction} from '../redux/actions/authActons';
 import {ActivityIndicator} from 'react-native-paper';
-import {LoggedLoadingAction} from '../../../redux/actions/authActons';
+import {LoggedLoadingAction} from '../redux/actions/authActons';
 import Home from '../screens/Home';
 import StackNav from './StackNav';
 import Drawer from '../Navigation/Drawer';
@@ -14,13 +14,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AppNav = () => {
   const dispatch = useDispatch();
-  const {loggedLoading, Token} = useSelector(state => state.authState);
+  const {loggedLoading, authLoading, Token} = useSelector(
+    state => state.authState,
+  );
 
   console.log(Token);
 
   useEffect(() => {
     (async () => {
       const userToken = await AsyncStorage.getItem('@user_token');
+      console.log(userToken);
       try {
         dispatch(LoggedAction(userToken));
       } catch (e) {
@@ -29,13 +32,9 @@ const AppNav = () => {
     })();
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   dispatch(LoggedAction());
-  // }, [dispatch]);
-
   return (
     <>
-      {loggedLoading ? (
+      {loggedLoading || authLoading ? (
         <View
           style={{
             marginTop: 'auto',
@@ -44,7 +43,7 @@ const AppNav = () => {
             paddingVertical: verticalScale(20),
           }}>
           <ActivityIndicator
-            animating={loggedLoading}
+            animating={loggedLoading || authLoading}
             color={'#c79248'}
             size={scale(30)}
           />

@@ -7,6 +7,7 @@ import Toast from 'react-native-toast-message';
 import 'react-native-gesture-handler';
 import AppNav from './app/Navigation/AppNav';
 import {NavigationContainer} from '@react-navigation/native';
+import Index from './app/Navigation/Index';
 
 const App = () => {
   // useEffect(() => {
@@ -16,6 +17,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <StatusBar backgroundColor={'#c79248'} />
+      {/* <Index /> */}
       <NavigationContainer>
         <AppNav />
       </NavigationContainer>

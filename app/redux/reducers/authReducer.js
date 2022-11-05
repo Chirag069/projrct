@@ -22,6 +22,7 @@ export default (state = initialState, action) => {
         ...state,
         Token: action.payload,
         loggedLoading: false,
+        authLoading: false,
       };
     case USER_LOGIN:
       return {
@@ -36,7 +37,7 @@ export default (state = initialState, action) => {
     case AUTH_LOADING:
       return {
         ...state,
-        authLoading: action.payload,
+        authLoading: true,
       };
     case LOGGED_LOADING:
       return {

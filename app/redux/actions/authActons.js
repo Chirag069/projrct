@@ -29,29 +29,19 @@ export const LoggedLoadingAction =
 export const LoggedAction =
   (usertoken = '') =>
   async dispatch => {
-    // try {
-    //   const value = await AsyncStorage.getItem('@user_token');
-    //   if (value) {
+    console.log(usertoken);
+
+    dispatch(LoggedLoadingAction(false));
     dispatch({
       type: LOGGED,
       payload: usertoken,
     });
-    //   } else {
-    //   }
-    // } catch (error) {
-    //   Toast.show({
-    //     text1: 'server response fail',
-    //     visibilityTime: 3000,
-    //     autoHide: true,
-    //     position: 'top',
-    //     type: 'error',
-    //   });
-    // }
   };
 
 export const authLogOutAction = () => async dispatch => {
   try {
     await AsyncStorage.removeItem('@user_token');
+    // dispatch(LoggedAction(null));
   } catch (e) {
     console.log(e);
   }
@@ -88,7 +78,7 @@ export const userLoginAction =
       .then(response => response.json())
       .then(result => {
         let serverResponse = result;
-        dispatch(authLoadingAction());
+
         if (serverResponse.status == true) {
           if (serverResponse && serverResponse.token) {
             (async () => {
@@ -96,11 +86,17 @@ export const userLoginAction =
             })();
           }
 
+          (async () => {
+            const userToken = await AsyncStorage.getItem('@user_token');
+            dispatch(LoggedAction(userToken));
+          })();
+
+          dispatch(authLoadingAction());
           dispatch({
             type: USER_LOGIN,
             payload: serverResponse.token,
           });
-
+          // dispatch(LoggedAction());
           Toast.show({
             text1: 'User Login Successfully',
             visibilityTime: 2000,

@@ -36,7 +36,6 @@ const SignIn = () => {
   const userSignIn = () => {
     if (emailInput && passwordInput) {
       dispatch(userLoginAction(emailInput, passwordInput));
-      dispatch(LoggedAction());
     } else {
       Toast.show({
         text1: 'you forgot to enter something',

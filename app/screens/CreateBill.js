@@ -26,6 +26,8 @@ const CreateBill = () => {
     LogBox.ignoreLogs([' Encountered two children with the same key']);
   }, []);
 
+  // console.log(Token);
+
   const newArray = qrdata.reduce((acc, dt) => {
     const formatedDate = dt.product_id;
 
