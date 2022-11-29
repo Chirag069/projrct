@@ -9,3 +9,7 @@ export const LOGGED_LOADING = 'LOGGED_LOADING';
 export const QRDATA = 'QRDATA';
 export const QRLOADING = 'QRLOADING';
 export const QRLIST = 'QRLIST';
+export const TOGGLE_CREATEBILL_MODEL = 'TOGGLE_CREATEBILL_MODEL';
+export const CUSTOMER_LIST = 'CUSTOMER_LIST';
+export const SUBMIT_BILL = 'SUBMIT_BILL';
+export const BILLARRAY = 'BILLARRAY';

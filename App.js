@@ -10,9 +10,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import Index from './app/Navigation/Index';
 
 const App = () => {
-  // useEffect(() => {
-  //   SplashScreen.hide();
-  // }, []);
+
 
   return (
     <Provider store={store}>
