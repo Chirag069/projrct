@@ -16,6 +16,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   billArrayAction,
   qrdataAction,
+  qrdataclearAction,
+  qrdatadeleteAction,
   qrListAction,
   toggleCreateBillModelAction,
 } from '../redux/actions/QrcodeAction';
@@ -23,6 +25,7 @@ import {LoggedAction} from '../redux/actions/authActons';
 import {userLoginAction} from '../redux/actions/authActons';
 import CreateBillModel from '../components/Custom/CreateBillModel';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Toast from 'react-native-toast-message';
 
 const CreateBill = ({navigation}) => {
   const [qrcode, setQrcode] = useState('');
@@ -32,40 +35,9 @@ const CreateBill = ({navigation}) => {
     state => state.qrState,
   );
 
-  const removebillitem = index => {
-    const removeitem = qrdata.filter(item => item.product_id === index);
-    console.log(removeitem);
-  };
-
-  var obj = {
-    results: [
-      {
-        id: '460',
-        name: 'Widget 1',
-        loc: 'Shed',
-      },
-      {
-        id: '461',
-        name: 'Widget 2',
-        loc: 'Kitchen',
-      },
-      {
-        id: '462',
-        name: 'Widget 3',
-        loc: 'bath',
-      },
-    ],
-  };
-
-  function removeFunction(myObjects, prop, valu) {
-    return myObjects.filter(function (val) {
-      return val[prop] !== valu;
-    });
-  }
-
-  console.log(removeFunction(obj.results, 'id', '460'));
-
-  // console.log(obj.results);
+  // while (qrdata.length > 0) {
+  //   qrdata.pop();
+  // }
 
   useEffect(() => {
     LogBox.ignoreLogs([' Encountered two children with the same key']);
@@ -88,10 +60,35 @@ const CreateBill = ({navigation}) => {
   }, {});
 
   const aaa = Object.values(newArray);
+  // console.log(aaa);
+
+  // console.log(qrdata);
+
+  const removebillitem = index => {
+    dispatch(qrdatadeleteAction(index));
+  };
 
   const selectcustomer = aaa => {
-    dispatch(billArrayAction(aaa));
-    dispatch(toggleCreateBillModelAction());
+    // aaa.map((item, index) => {
+    //   const productlen = Object.keys(item.value).length;
+    //   var a = item.value[0].pieces * productlen;
+    //   var b = item.value[0].price;
+    //   const c = a * b;
+    //   const total = c.toFixed(2);
+    // });
+
+    if (aaa.length > 0) {
+      dispatch(billArrayAction(aaa));
+      dispatch(toggleCreateBillModelAction());
+    } else {
+      Toast.show({
+        text1: 'Please Scan QR',
+        visibilityTime: 2000,
+        autoHide: true,
+        position: 'top',
+        type: 'success',
+      });
+    }
   };
 
   return (
@@ -119,7 +116,11 @@ const CreateBill = ({navigation}) => {
             }}>
             <TextInput
               label="Enter QR Code"
-              style={{backgroundColor: 'white', fontSize: scale(13)}}
+              style={{
+                backgroundColor: 'white',
+                fontSize: scale(13),
+                fontFamily: 'Cairo-Regular',
+              }}
               onChangeText={setQrcode}
               value={qrcode}
             />
@@ -128,8 +129,9 @@ const CreateBill = ({navigation}) => {
                 buttoncolor={'#c79248'}
                 buttonwidth={scale(330)}
                 buttonheight={verticalScale(35)}
-                borderradius={scale(0)}
+                borderradius={scale(5)}
                 text={'SUBMIT'}
+                fontFamily={'Cairo-Regular'}
                 fontcolor={'white'}
                 fontSize={scale(17)}
                 onPress={() => {
@@ -272,8 +274,9 @@ const CreateBill = ({navigation}) => {
               buttoncolor={'#c79248'}
               buttonwidth={scale(330)}
               buttonheight={verticalScale(35)}
-              borderradius={scale(20)}
+              borderradius={scale(5)}
               text={'SELECT CUSTOMER'}
+              fontFamily={'Cairo-Regular'}
               fontcolor={'white'}
               fontSize={scale(17)}
               onPress={() => selectcustomer(aaa)}

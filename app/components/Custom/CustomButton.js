@@ -12,14 +12,15 @@ const CustomButton = ({
   fontcolor,
   onPress,
   borderWidth,
-  borderColor
+  borderColor,
+  fontFamily,
 }) => {
   return (
     <TouchableOpacity
-    onPress={onPress}
+      onPress={onPress}
       style={{
-        borderWidth:borderWidth,
-        borderColor:borderColor,
+        borderWidth: borderWidth,
+        borderColor: borderColor,
         backgroundColor: buttoncolor,
         width: buttonwidth,
         height: buttonheight,
@@ -27,7 +28,10 @@ const CustomButton = ({
         justifyContent: 'center',
         borderRadius: borderradius,
       }}>
-      <Text style={{fontSize: fontSize, color: fontcolor}}>{text}</Text>
+      <Text
+        style={{fontSize: fontSize, color: fontcolor, fontFamily: fontFamily}}>
+        {text}
+      </Text>
     </TouchableOpacity>
   );
 };

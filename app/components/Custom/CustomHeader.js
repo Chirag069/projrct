@@ -17,6 +17,7 @@ import CustomButton from './CustomButton';
 //icon
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {color} from 'react-native-reanimated';
 
 const CustomHeader = () => {
   const navigation = useNavigation();
@@ -114,22 +115,22 @@ const CustomHeader = () => {
             </View>
           </View>
         </Modal>
-        <TouchableOpacity
-          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
-          <Entypo name="list" size={scale(30)} color={'white'} />
-        </TouchableOpacity>
-        <Image
-          style={{
-            height: verticalScale(30),
-            width: verticalScale(120),
-            marginTop: scale(5),
-          }}
-          source={require('../../assets/Images/Raging-Gold.png')}
-        />
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <TouchableOpacity
+            onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
+            <Entypo name="list" size={scale(30)} color={'white'} />
+          </TouchableOpacity>
+          <Text
+            style={{
+              fontSize: scale(20),
+              color: '#000000',
+              marginLeft: scale(10),
+              fontFamily: 'Cairo-Regular',
+            }}>
+            Qr Scanner
+          </Text>
+        </View>
       </View>
-      {/* <TouchableOpacity onPress={() => setModalVisible(true)}>
-        <AntDesign name="search1" size={scale(25)} color="white" />
-      </TouchableOpacity> */}
     </View>
   );
 };

@@ -6,6 +6,8 @@ import {
   CUSTOMER_LIST,
   SUBMIT_BILL,
   BILLARRAY,
+  QRDATA_CLEAR,
+  QRDATA_DELETE,
 } from './types';
 import Toast from 'react-native-toast-message';
 
@@ -26,11 +28,24 @@ export const qrListAction =
       payload: qrdata,
     });
   };
+export const qrdataclearAction = () => {
+  return {
+    type: QRDATA_CLEAR,
+  };
+};
+
+export const qrdatadeleteAction =
+  (productid = '') =>
+  dispatch => {
+    dispatch({
+      type: QRDATA_DELETE,
+      payload: productid,
+    });
+  };
 
 export const qrdataAction =
   (userToken = '', barcode = '', billresponse) =>
   dispatch => {
-    console.log(billresponse);
     dispatch(qrLoadingAction(true));
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${userToken}`);
@@ -69,13 +84,13 @@ export const qrdataAction =
           // });
         } else {
           dispatch(qrLoadingAction());
-          Toast.show({
-            text1: serverResponse.message,
-            visibilityTime: 2000,
-            autoHide: true,
-            position: 'top',
-            type: 'error',
-          });
+          // Toast.show({
+          //   text1: serverResponse.message,
+          //   visibilityTime: 2000,
+          //   autoHide: true,
+          //   position: 'top',
+          //   type: 'error',
+          // });
         }
       })
       .catch(error => {
@@ -190,11 +205,6 @@ export const SubmiBillAction =
       .then(result => {
         const serverResponse = result;
         if (serverResponse.success == 1) {
-          dispatch(qrdataAction(tokan, '*', null));
-        } else {
-          dispatch(qrdataAction(tokan, '*', ''));
-        }
-        if (serverResponse.success == 1) {
           dispatch({
             type: SUBMIT_BILL,
             payload: serverResponse.success,
@@ -224,8 +234,20 @@ export const SubmiBillAction =
 export const billArrayAction =
   (arrayy = '') =>
   dispatch => {
-    dispatch({
-      type: BILLARRAY,
-      payload: arrayy,
+    arrayy.map((item, index) => {
+      const productlen = Object.keys(item.value).length;
+      var a = item.value[0].pieces * productlen;
+      var b = item.value[0].price;
+      const c = a * b;
+      const total = c.toFixed(2);
+
+      dispatch({
+        type: BILLARRAY,
+        payloadproductid: item.productid,
+        payloadqty: item.value[0].pieces * productlen,
+        payloadpieces: item.value[0].pieces,
+        payloadprice: b,
+        payloadtotal: total,
+      });
     });
   };

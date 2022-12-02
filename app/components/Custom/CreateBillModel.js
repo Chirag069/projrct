@@ -5,6 +5,7 @@ import {
   Button,
   TouchableOpacity,
   Platform,
+  Alert,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
@@ -13,6 +14,8 @@ import Modal from 'react-native-modal';
 import CustomButton from './CustomButton';
 import {
   CustomerListAction,
+  qrdataAction,
+  qrdataclearAction,
   SubmiBillAction,
   toggleCreateBillModelAction,
 } from '../../redux/actions/QrcodeAction';
@@ -21,6 +24,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import Toast from 'react-native-toast-message';
 
 const CreateBillModel = ({}) => {
   useEffect(() => {
@@ -28,7 +32,16 @@ const CreateBillModel = ({}) => {
   }, []);
 
   const dispatch = useDispatch();
-  const {CreatebillModalShow, billarray} = useSelector(state => state.qrState);
+  const {
+    CreatebillModalShow,
+    billarray,
+    qrdata,
+    billproductid,
+    billqty,
+    billpieces,
+    billprice,
+    billtotal,
+  } = useSelector(state => state.qrState);
   const {Token} = useSelector(state => state.authState);
   const {customerlist} = useSelector(state => state.qrState);
   const [value, setValue] = useState(null);
@@ -38,6 +51,8 @@ const CreateBillModel = ({}) => {
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
   const [text, setText] = useState('Empty');
+
+  console.log(qrdata);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -211,28 +226,31 @@ const CreateBillModel = ({}) => {
             fontcolor={'white'}
             fontSize={scale(15)}
             onPress={() => {
-              {
-                billarray.map((item, index) => {
-                  const productlen = Object.keys(item.value).length;
-                  var a = item.value[0].pieces * productlen;
-                  var b = item.value[0].price;
-                  const c = a * b;
-                  const total = c.toFixed(2);
-                  dispatch(
-                    SubmiBillAction(
-                      Token,
-                      text,
-                      value,
-                      item.productid,
-                      item.value[0].pieces * productlen,
-                      item.value[0].pieces,
-                      item.value[0].price,
-                      total,
-                    ),
-                  );
-                });
+              if (text && value) {
+                dispatch(
+                  SubmiBillAction(
+                    Token,
+                    text,
+                    value,
+                    billproductid,
+                    billqty,
+                    billpieces,
+                    billprice,
+                    billtotal,
+                  ),
+                );
+                dispatch(qrdataclearAction());
+                dispatch(toggleCreateBillModelAction());
+              } else {
+                Alert.alert('Please Select Customer');
+                // Toast.show({
+                //   text1: 'Please select customer',
+                //   visibilityTime: 2000,
+                //   autoHide: true,
+                //   position: 'top',
+                //   type: 'success',
+                // });
               }
-              dispatch(toggleCreateBillModelAction());
             }}
           />
         </View>

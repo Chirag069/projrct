@@ -6,6 +6,8 @@ import {
   CUSTOMER_LIST,
   BILLARRAY,
   SUBMIT_BILL,
+  QRDATA_CLEAR,
+  QRDATA_DELETE,
 } from '../actions/types';
 
 const initialState = {
@@ -15,8 +17,12 @@ const initialState = {
   qrrr: [],
   CreatebillModalShow: false,
   customerlist: [],
-  billarray: [],
   createbillstatus: [],
+  billproductid: [],
+  billpieces: [],
+  billprice: [],
+  billqty: [],
+  billtotal: [],
 };
 
 export default (state = initialState, action) => {
@@ -24,8 +30,17 @@ export default (state = initialState, action) => {
     case QRDATA:
       return {
         ...state,
-
-        qrdata: [...new Set([action.payload, ...state.qrdata])],
+        qrdata: [action.payload, ...state.qrdata],
+      };
+    case QRDATA_CLEAR:
+      return {
+        ...state,
+        qrdata: [],
+      };
+    case QRDATA_DELETE:
+      return {
+        ...state,
+        qrdata: state.qrdata.filter(item => item.product_id !== action.payload),
       };
     case QRLOADING:
       return {
@@ -35,7 +50,6 @@ export default (state = initialState, action) => {
     case QRLIST:
       return {
         ...state,
-
         qrlist: [...new Set([action.payload, ...state.qrlist])],
       };
     case TOGGLE_CREATEBILL_MODEL:
@@ -51,7 +65,11 @@ export default (state = initialState, action) => {
     case BILLARRAY:
       return {
         ...state,
-        billarray: action.payload,
+        billproductid: action.payloadproductid,
+        billqty: action.payloadqty,
+        billpieces: action.payloadpieces,
+        billprice: action.payloadprice,
+        billtotal: action.payloadtotal,
       };
     case SUBMIT_BILL:
       return {
