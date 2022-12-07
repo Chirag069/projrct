@@ -3,13 +3,13 @@ import {Button, View} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {scale, verticalScale, moderateScale} from 'react-native-size-matters';
 import CustomDrawer from '../components/Custom/CustomDrawer';
-import Home from '../screens/Home';
 import CustomHeader from '../components/Custom/CustomHeader';
 import StackNav from './StackNav';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SignIn from '../screens/SignIn';
 import SignUp from '../screens/SignUp';
 import CreateBill from '../screens/CreateBill';
+import Scanner from '../screens/Scanner';
 
 const Drawer = createDrawerNavigator();
 
@@ -35,14 +35,14 @@ export default function App() {
         drawerLabelStyle: {},
         headerShown: false,
       }}>
-      {/* <Drawer.Screen
+      <Drawer.Screen
         options={{
           headerShown: true,
           header: () => <CustomHeader />,
         }}
-        name="Home"
-        component={Home}
-      /> */}
+        name="Scanner"
+        component={Scanner}
+      />
       <Drawer.Screen
         options={{
           headerShown: true,

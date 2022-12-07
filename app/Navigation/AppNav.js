@@ -6,7 +6,6 @@ import {useSelector, useDispatch} from 'react-redux';
 import {LoggedAction} from '../redux/actions/authActons';
 import {ActivityIndicator} from 'react-native-paper';
 import {LoggedLoadingAction} from '../redux/actions/authActons';
-import Home from '../screens/Home';
 import StackNav from './StackNav';
 import Drawer from '../Navigation/Drawer';
 import AuthStack from './AuthStack';
