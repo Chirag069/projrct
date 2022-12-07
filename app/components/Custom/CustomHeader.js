@@ -25,7 +25,7 @@ const CustomHeader = () => {
   return (
     <View
       style={{
-        backgroundColor: '#c79248',
+        backgroundColor: '#9ECED9',
         paddingHorizontal: scale(10),
         flexDirection: 'row',
         justifyContent: 'space-between',

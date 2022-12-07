@@ -34,6 +34,13 @@
 		969CE150652C49EFAE7E8438 /* Poppins-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D21D507BE4C745FDBD420CD2 /* Poppins-SemiBoldItalic.ttf */; };
 		1EBC5AD6E60B49A182E9E397 /* Poppins-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 17D1C03C3DA14BC0B3859DAF /* Poppins-Thin.ttf */; };
 		354A835C56E140198E697F5C /* Poppins-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AB3334D6E5944E76BE3F0825 /* Poppins-ThinItalic.ttf */; };
+		8BF1D308E0F8466C8B54367F /* Cairo-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0630C705551C473C9E4C732D /* Cairo-Black.ttf */; };
+		4FDB914DE80E4DC4904D2926 /* Cairo-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F94F88AD3DBC4915A350E0A6 /* Cairo-Bold.ttf */; };
+		A6C4650EFF894020AB7B476D /* Cairo-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5DD0DB5572E641EC92A5BC32 /* Cairo-ExtraBold.ttf */; };
+		810E8D15C99E406683256A74 /* Cairo-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 38A514656C174F26B422CCA1 /* Cairo-ExtraLight.ttf */; };
+		2E95838CB71F4E43918845F0 /* Cairo-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18419B0E3AA44151B6BD6F23 /* Cairo-Light.ttf */; };
+		E43ED1C202274D0FB47C63A5 /* Cairo-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ECE7911F1ED94202975A53AF /* Cairo-Medium.ttf */; };
+		8AAA9CCB937347E2863742DA /* Cairo-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0997E17D8DF4C68820FF07B /* Cairo-SemiBold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,6 +91,13 @@
 		D21D507BE4C745FDBD420CD2 /* Poppins-SemiBoldItalic.ttf */ = {isa = PBXFileReference; name = "Poppins-SemiBoldItalic.ttf"; path = "../app/assets/fonts/Poppins-SemiBoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		17D1C03C3DA14BC0B3859DAF /* Poppins-Thin.ttf */ = {isa = PBXFileReference; name = "Poppins-Thin.ttf"; path = "../app/assets/fonts/Poppins-Thin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		AB3334D6E5944E76BE3F0825 /* Poppins-ThinItalic.ttf */ = {isa = PBXFileReference; name = "Poppins-ThinItalic.ttf"; path = "../app/assets/fonts/Poppins-ThinItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		0630C705551C473C9E4C732D /* Cairo-Black.ttf */ = {isa = PBXFileReference; name = "Cairo-Black.ttf"; path = "../app/assets/fonts/Cairo-Black.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F94F88AD3DBC4915A350E0A6 /* Cairo-Bold.ttf */ = {isa = PBXFileReference; name = "Cairo-Bold.ttf"; path = "../app/assets/fonts/Cairo-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		5DD0DB5572E641EC92A5BC32 /* Cairo-ExtraBold.ttf */ = {isa = PBXFileReference; name = "Cairo-ExtraBold.ttf"; path = "../app/assets/fonts/Cairo-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		38A514656C174F26B422CCA1 /* Cairo-ExtraLight.ttf */ = {isa = PBXFileReference; name = "Cairo-ExtraLight.ttf"; path = "../app/assets/fonts/Cairo-ExtraLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		18419B0E3AA44151B6BD6F23 /* Cairo-Light.ttf */ = {isa = PBXFileReference; name = "Cairo-Light.ttf"; path = "../app/assets/fonts/Cairo-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		ECE7911F1ED94202975A53AF /* Cairo-Medium.ttf */ = {isa = PBXFileReference; name = "Cairo-Medium.ttf"; path = "../app/assets/fonts/Cairo-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		E0997E17D8DF4C68820FF07B /* Cairo-SemiBold.ttf */ = {isa = PBXFileReference; name = "Cairo-SemiBold.ttf"; path = "../app/assets/fonts/Cairo-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,6 +226,13 @@
 				D21D507BE4C745FDBD420CD2 /* Poppins-SemiBoldItalic.ttf */,
 				17D1C03C3DA14BC0B3859DAF /* Poppins-Thin.ttf */,
 				AB3334D6E5944E76BE3F0825 /* Poppins-ThinItalic.ttf */,
+				0630C705551C473C9E4C732D /* Cairo-Black.ttf */,
+				F94F88AD3DBC4915A350E0A6 /* Cairo-Bold.ttf */,
+				5DD0DB5572E641EC92A5BC32 /* Cairo-ExtraBold.ttf */,
+				38A514656C174F26B422CCA1 /* Cairo-ExtraLight.ttf */,
+				18419B0E3AA44151B6BD6F23 /* Cairo-Light.ttf */,
+				ECE7911F1ED94202975A53AF /* Cairo-Medium.ttf */,
+				E0997E17D8DF4C68820FF07B /* Cairo-SemiBold.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -333,6 +354,13 @@
 				969CE150652C49EFAE7E8438 /* Poppins-SemiBoldItalic.ttf in Resources */,
 				1EBC5AD6E60B49A182E9E397 /* Poppins-Thin.ttf in Resources */,
 				354A835C56E140198E697F5C /* Poppins-ThinItalic.ttf in Resources */,
+				8BF1D308E0F8466C8B54367F /* Cairo-Black.ttf in Resources */,
+				4FDB914DE80E4DC4904D2926 /* Cairo-Bold.ttf in Resources */,
+				A6C4650EFF894020AB7B476D /* Cairo-ExtraBold.ttf in Resources */,
+				810E8D15C99E406683256A74 /* Cairo-ExtraLight.ttf in Resources */,
+				2E95838CB71F4E43918845F0 /* Cairo-Light.ttf in Resources */,
+				E43ED1C202274D0FB47C63A5 /* Cairo-Medium.ttf in Resources */,
+				8AAA9CCB937347E2863742DA /* Cairo-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

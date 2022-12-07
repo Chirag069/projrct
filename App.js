@@ -10,11 +10,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import Index from './app/Navigation/Index';
 
 const App = () => {
-
-
   return (
     <Provider store={store}>
-      <StatusBar backgroundColor={'#c79248'} />
       <Index />
       <Toast />
     </Provider>

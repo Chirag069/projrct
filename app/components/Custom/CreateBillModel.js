@@ -34,8 +34,8 @@ const CreateBillModel = ({}) => {
   const dispatch = useDispatch();
   const {
     CreatebillModalShow,
-    billarray,
     qrdata,
+    billcolor,
     billproductid,
     billqty,
     billpieces,
@@ -51,8 +51,6 @@ const CreateBillModel = ({}) => {
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
   const [text, setText] = useState('Empty');
-
-  console.log(qrdata);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -227,16 +225,19 @@ const CreateBillModel = ({}) => {
             fontSize={scale(15)}
             onPress={() => {
               if (text && value) {
-                dispatch(
-                  SubmiBillAction(
-                    Token,
-                    text,
-                    value,
-                    billproductid,
-                    billqty,
-                    billpieces,
-                    billprice,
-                    billtotal,
+                qrdata.map(item =>
+                  dispatch(
+                    SubmiBillAction(
+                      Token,
+                      text,
+                      value,
+                      item.productid,
+                      item.qty,
+                      item.pieces,
+                      item.price,
+                      item.total,
+                      item.color,
+                    ),
                   ),
                 );
                 dispatch(qrdataclearAction());

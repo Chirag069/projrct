@@ -8,8 +8,15 @@ import {
   BILLARRAY,
   QRDATA_CLEAR,
   QRDATA_DELETE,
+  QTY_MODEL,
+  UPDATE_QRDATA,
+  EDIT_PRICE,
+  PRICE_MODEL,
+  EDIT_PRICEPID,
+  QTY_INCRIMENT,
 } from './types';
 import Toast from 'react-native-toast-message';
+import qrcodeReducer from '../reducers/qrcodeReducer';
 
 export const qrLoadingAction =
   (loading = false) =>
@@ -28,6 +35,16 @@ export const qrListAction =
       payload: qrdata,
     });
   };
+
+export const qtyincrimentAction =
+  (incrimentid = '') =>
+  dispatch => {
+    dispatch({
+      type: QTY_INCRIMENT,
+      payload: incrimentid,
+    });
+  };
+
 export const qrdataclearAction = () => {
   return {
     type: QRDATA_CLEAR,
@@ -44,7 +61,7 @@ export const qrdatadeleteAction =
   };
 
 export const qrdataAction =
-  (userToken = '', barcode = '', billresponse) =>
+  (userToken = '', barcode = '') =>
   dispatch => {
     dispatch(qrLoadingAction(true));
     var myHeaders = new Headers();
@@ -70,9 +87,24 @@ export const qrdataAction =
 
         dispatch(qrLoadingAction());
         if (serverResponse?.success == 1) {
+          const data = serverResponse.data;
+
+          const qr = {
+            key: barcode,
+            price: data.price,
+            pieces: data.pieces,
+            color: data.color,
+            productid: data.product_id,
+            qty: 1,
+            pname: data.pname,
+            total: (data.price * data.pieces).toFixed(2),
+            pc: data.pieces,
+          };
+
           dispatch({
             type: QRDATA,
-            payload: serverResponse.data,
+            payload: qr,
+            payloadscncode: barcode,
           });
 
           // Toast.show({
@@ -109,6 +141,46 @@ export const toggleCreateBillModelAction = () => dispatch => {
     type: TOGGLE_CREATEBILL_MODEL,
   });
 };
+
+export const toggleQtyModelAction = () => dispatch => {
+  dispatch({
+    type: QTY_MODEL,
+  });
+};
+
+export const togglepriceModelAction = () => dispatch => {
+  dispatch({
+    type: PRICE_MODEL,
+  });
+};
+
+export const editPriceAction =
+  (editprice = '', productid = '') =>
+  dispatch => {
+    dispatch({
+      type: EDIT_PRICE,
+      payloadeditprice: editprice,
+      payloadeditproductid: productid,
+    });
+  };
+
+export const editpricepidAction =
+  (productid = '') =>
+  dispatch => {
+    dispatch({
+      type: EDIT_PRICEPID,
+      payload: productid,
+    });
+  };
+
+export const UpdateQrdataAction =
+  (qty = '') =>
+  dispatch => {
+    dispatch({
+      type: UPDATE_QRDATA,
+      payloadqty: qty,
+    });
+  };
 
 export const CustomerListAction =
   (userToken = '') =>
@@ -175,6 +247,7 @@ export const SubmiBillAction =
     pieces = '',
     price = '',
     total = '',
+    color = '',
   ) =>
   async dispatch => {
     var myHeaders = new Headers();
@@ -183,8 +256,8 @@ export const SubmiBillAction =
     var formdata = new FormData();
     formdata.append('date', date);
     formdata.append('customer_id', customerId);
-
     formdata.append('product_id[]', productId);
+    formdata.append('total[]', color);
     formdata.append('quantity[]', qty);
     formdata.append('pieces[]', pieces);
     formdata.append('price[]', price);
@@ -235,19 +308,14 @@ export const billArrayAction =
   (arrayy = '') =>
   dispatch => {
     arrayy.map((item, index) => {
-      const productlen = Object.keys(item.value).length;
-      var a = item.value[0].pieces * productlen;
-      var b = item.value[0].price;
-      const c = a * b;
-      const total = c.toFixed(2);
-
       dispatch({
         type: BILLARRAY,
+        payloadcolor: item.color,
         payloadproductid: item.productid,
-        payloadqty: item.value[0].pieces * productlen,
-        payloadpieces: item.value[0].pieces,
-        payloadprice: b,
-        payloadtotal: total,
+        payloadqty: item.qty,
+        payloadpieces: item.pieces,
+        payloadprice: item.price,
+        payloadtotal: item.total,
       });
     });
   };

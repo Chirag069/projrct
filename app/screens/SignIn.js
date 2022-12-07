@@ -7,9 +7,11 @@ import {
   Dimensions,
   Pressable,
   Keyboard,
+  StatusBar,
+  TextInput,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {TextInput, Button} from 'react-native-paper';
+import {Button} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
 import Toast from 'react-native-toast-message';
@@ -49,6 +51,7 @@ const SignIn = () => {
 
   return (
     <SafeAreaView style={{backgroundColor: 'white', flex: 1}}>
+      <StatusBar backgroundColor={'#FFFFFF'} barStyle="dark-content" />
       <ScrollView>
         <View style={{alignItems: 'center', marginTop: verticalScale(20)}}>
           <Image
@@ -61,24 +64,52 @@ const SignIn = () => {
             Customer Sign In
           </Text>
         </View>
-        <View style={{marginHorizontal: 20, marginVertical: 30}}>
+        <View
+          style={{
+            marginHorizontal: scale(20),
+            marginTop: verticalScale(30),
+            marginBottom: verticalScale(5),
+          }}>
           <TextInput
-            label="User Name"
-            style={{backgroundColor: 'white', fontSize: scale(13)}}
+            placeholder="Enter QR Code"
+            placeholderTextColor={'#666666'}
+            activeUnderlineColor={'#000000'}
+            underlineColor="black"
+            style={{
+              backgroundColor: 'white',
+              fontSize: scale(15),
+              borderBottomWidth: 1,
+              borderBottomColor: '#000000',
+            }}
             onChangeText={setEmailInput}
             value={emailInput}
           />
+        </View>
+        <View
+          style={{
+            marginHorizontal: scale(20),
+            marginBottom: verticalScale(30),
+          }}>
           <TextInput
-            label="Password"
-            style={{backgroundColor: 'white', fontSize: scale(13)}}
+            placeholder="Password"
+            placeholderTextColor={'#666666'}
+            activeUnderlineColor={'#000000'}
+            underlineColor="black"
+            keyboardType="numeric"
             secureTextEntry={true}
+            style={{
+              backgroundColor: 'white',
+              fontSize: scale(15),
+              borderBottomWidth: 1,
+              borderBottomColor: '#000000',
+            }}
             onChangeText={setPasswordInput}
             value={passwordInput}
           />
         </View>
         <View style={{paddingHorizontal: scale(35)}}>
           <CustomButton
-            buttoncolor={'#c79248'}
+            buttoncolor={'#9ECED9'}
             buttonwidth={scale(270)}
             buttonheight={verticalScale(50)}
             borderradius={scale(30)}
