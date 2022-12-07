@@ -197,7 +197,7 @@ const CreateBill = ({navigation}) => {
                       marginHorizontal: scale(10),
                       borderRadius: 5,
                     }}>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                       style={{
                         position: 'absolute',
                         right: scale(5),
@@ -205,9 +205,9 @@ const CreateBill = ({navigation}) => {
                       }}
                       onPress={() => {
                         removebillitem(index);
-                      }}>
-                      <AntDesign name="close" size={scale(20)} />
-                    </TouchableOpacity>
+                      }}> */}
+                    <AntDesign name="close" size={scale(20)} />
+                    {/* </TouchableOpacity> */}
                     <View
                       style={{
                         marginHorizontal: scale(10),
@@ -230,22 +230,22 @@ const CreateBill = ({navigation}) => {
                         flexDirection: 'row',
                         justifyContent: 'space-between',
                       }}>
-                      <TouchableOpacity
+                      {/* <TouchableOpacity
                         onPress={() => {
                           dispatch(togglepriceModelAction());
                           dispatch(editpricepidAction(item.productid));
+                        }}> */}
+                      <Text
+                        style={{
+                          fontSize: verticalScale(13),
+                          color: 'black',
+                          fontFamily: 'Cairo-Regular',
+                          marginBottom: verticalScale(5),
+                          // fontWeight: 'bold',
                         }}>
-                        <Text
-                          style={{
-                            fontSize: verticalScale(13),
-                            color: 'black',
-                            fontFamily: 'Cairo-Regular',
-                            marginBottom: verticalScale(5),
-                            // fontWeight: 'bold',
-                          }}>
-                          Price :- {item?.price}
-                        </Text>
-                      </TouchableOpacity>
+                        Price :- {item?.price}
+                      </Text>
+                      {/* </TouchableOpacity> */}
                       <Text
                         style={{
                           fontSize: verticalScale(13),

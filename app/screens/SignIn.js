@@ -140,21 +140,21 @@ const SignIn = () => {
             justifyContent: 'center',
             marginTop: 10,
           }}>
-          <Pressable
+          {/* <Pressable
             onPress={() => navigation.navigate('SignUp')}
-            style={{flexDirection: 'row'}}>
-            <Text style={{color: 'black', fontSize: scale(12)}}>
-              You are not a registered use click{' '}
-            </Text>
-            <Text
-              style={{
-                textDecorationLine: 'underline',
-                color: 'black',
-                fontSize: scale(12),
-              }}>
-              here
-            </Text>
-          </Pressable>
+            style={{flexDirection: 'row'}}> */}
+          <Text style={{color: 'black', fontSize: scale(12)}}>
+            You are not a registered use click{' '}
+          </Text>
+          <Text
+            style={{
+              textDecorationLine: 'underline',
+              color: 'black',
+              fontSize: scale(12),
+            }}>
+            here
+          </Text>
+          {/* </Pressable> */}
         </View>
       </ScrollView>
     </SafeAreaView>
