@@ -35,14 +35,14 @@ export default function App() {
         drawerLabelStyle: {},
         headerShown: false,
       }}>
-      {/* <Drawer.Screen
+      <Drawer.Screen
         options={{
           headerShown: true,
           header: () => <CustomHeader />,
         }}
         name="Scanner"
         component={Scanner}
-      /> */}
+      />
       <Drawer.Screen
         options={{
           headerShown: true,

@@ -39,13 +39,14 @@ import PriceModel from '../components/Custom/PriceModel';
 import {validatePathConfig} from '@react-navigation/native';
 
 const CreateBill = ({navigation}) => {
-  const [qrcode, setQrcode] = useState('');
+  const [qrcode, setQrcode] = useState('103');
   const dispatch = useDispatch();
   const {Token} = useSelector(state => state.authState);
   const {qrdata, qrLoading} = useSelector(state => state.qrState);
 
   useEffect(() => {
     LogBox.ignoreLogs([' Encountered two children with the same key']);
+    onchange();
   }, []);
 
   const removebillitem = index => {
@@ -64,6 +65,29 @@ const CreateBill = ({navigation}) => {
         position: 'top',
         type: 'success',
       });
+    }
+  };
+
+  const onchange = text => {
+    setQrcode(text);
+    if (qrdata.length == 0) {
+      dispatch(qrdataAction(Token, qrcode));
+    } else {
+      var len = qrdata.length;
+      var duplicate = 0;
+
+      for (let i = 0; i < len; i++) {
+        let item = qrdata[i];
+        if (item.key === qrcode) {
+          duplicate = +1;
+        }
+      }
+
+      if (duplicate === 1) {
+        dispatch(qtyincrimentAction(qrcode));
+      } else {
+        dispatch(qrdataAction(Token, qrcode));
+      }
     }
   };
 
@@ -105,8 +129,9 @@ const CreateBill = ({navigation}) => {
                 fontSize: scale(15),
                 borderBottomWidth: 1,
               }}
-              onChangeText={setQrcode}
+              onChangeText={text => onchange(text)}
               value={qrcode}
+              onSubmitEditing={() => onchange()}
             />
             <View
               style={{
@@ -197,7 +222,7 @@ const CreateBill = ({navigation}) => {
                       marginHorizontal: scale(10),
                       borderRadius: 5,
                     }}>
-                    {/* <TouchableOpacity
+                    <TouchableOpacity
                       style={{
                         position: 'absolute',
                         right: scale(5),
@@ -205,9 +230,9 @@ const CreateBill = ({navigation}) => {
                       }}
                       onPress={() => {
                         removebillitem(index);
-                      }}> */}
-                    <AntDesign name="close" size={scale(20)} />
-                    {/* </TouchableOpacity> */}
+                      }}>
+                      <AntDesign name="close" size={scale(20)} />
+                    </TouchableOpacity>
                     <View
                       style={{
                         marginHorizontal: scale(10),
@@ -256,21 +281,21 @@ const CreateBill = ({navigation}) => {
                         }}>
                         Pc :- {item?.pieces}
                       </Text>
-                      <TouchableOpacity
+                      {/* <TouchableOpacity
                         onPress={() => {
                           dispatch(toggleQtyModelAction());
+                        }}> */}
+                      <Text
+                        style={{
+                          fontSize: verticalScale(13),
+                          color: 'black',
+                          fontFamily: 'Cairo-Regular',
+                          // fontWeight: 'bold',
+                          marginBottom: verticalScale(5),
                         }}>
-                        <Text
-                          style={{
-                            fontSize: verticalScale(13),
-                            color: 'black',
-                            fontFamily: 'Cairo-Regular',
-                            // fontWeight: 'bold',
-                            marginBottom: verticalScale(5),
-                          }}>
-                          Qty :- {item?.qty}
-                        </Text>
-                      </TouchableOpacity>
+                        Qty :- {item?.qty}
+                      </Text>
+                      {/* </TouchableOpacity> */}
 
                       <Text
                         style={{

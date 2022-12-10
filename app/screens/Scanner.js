@@ -1,52 +1,56 @@
-import {View, Text, Button, Linking} from 'react-native';
-import React, {useEffect} from 'react';
-import {Camera, useCameraDevices} from 'react-native-vision-camera';
-import {useCallback} from 'react';
-import {Svg, Defs, Rect, Mask} from 'react-native-svg';
-import {BarcodeFormat, useScanBarcodes} from 'vision-camera-code-scanner';
-import {useState} from 'react';
+import React, {useState} from 'react';
+
+import {StyleSheet, Text, TouchableOpacity, Linking} from 'react-native';
+
+import QRCodeScanner from 'react-native-qrcode-scanner';
+import {RNCamera} from 'react-native-camera';
 
 const Scanner = () => {
-  const [barcode, setBarcode] = useState('');
-  const [isScanned, setIsScanned] = useState(false);
-  const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE]);
-  const devices = useCameraDevices();
-  const device = devices.back;
-
-  useEffect(() => {
-    requestCameraPermission();
-  }, []);
-
-  console.log(barcodes);
-
-  const requestCameraPermission = useCallback(async () => {
-    const permission = await Camera.requestCameraPermission();
-
-    if (permission == 'denied') await Linking.openSettings();
-  }, []);
-
-  const renderCamera = () => {
-    if (device == null) {
-      return <View style={{flex: 1}}></View>;
-    } else {
-      return (
-        <View style={{flex: 1}}>
-          <Camera
-            style={{
-              flex: 1,
-            }}
-            device={device}
-            isActive={true}
-            enableZoomGesture
-            frameProcessor={frameProcessor}
-            frameProcessorFps={5}
-          />
-        </View>
-      );
+  const [qrresult, setQrresult] = useState([]);
+  let i = 0;
+  const onSuccess = ({data}) => {
+    i++;
+    if (i === 1) {
+      setQrresult(data);
     }
+    // Linking.openURL(e.data).catch(err =>
+    //   console.error('An error occured', err),
+    // );
   };
 
-  return <View style={{flex: 1}}>{renderCamera()}</View>;
+  return (
+    <QRCodeScanner
+      onRead={onSuccess}
+      reactivate={true}
+      flashMode={RNCamera.Constants.FlashMode.off}
+      topContent={<Text style={styles.centerText}>{qrresult}</Text>}
+      bottomContent={
+        <TouchableOpacity style={styles.buttonTouchable}>
+          <Text style={styles.buttonText}>OK. Got it!</Text>
+        </TouchableOpacity>
+      }
+    />
+  );
 };
 
 export default Scanner;
+
+const styles = StyleSheet.create({
+  centerText: {
+    flex: 1,
+    fontSize: 18,
+    padding: 32,
+    color: '#777',
+  },
+  textBold: {
+    fontWeight: '500',
+    color: '#000',
+  },
+  buttonText: {
+    fontSize: 21,
+    color: 'rgb(0,122,255)',
+  },
+  buttonTouchable: {
+    padding: 16,
+  },
+});

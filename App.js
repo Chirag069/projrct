@@ -2,7 +2,7 @@ import {View, Text, StatusBar} from 'react-native';
 import React, {useEffect} from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import {Provider} from 'react-redux';
-import 'react-native-reanimated';
+// import 'react-native-reanimated';
 import store from './app/redux/store';
 import Toast from 'react-native-toast-message';
 import 'react-native-gesture-handler';
