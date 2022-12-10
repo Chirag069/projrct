@@ -14,9 +14,11 @@ const CustomButton = ({
   borderWidth,
   borderColor,
   fontFamily,
+  disabled,
 }) => {
   return (
     <TouchableOpacity
+      disabled={disabled}
       onPress={onPress}
       style={{
         borderWidth: borderWidth,
