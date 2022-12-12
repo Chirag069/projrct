@@ -21,3 +21,4 @@ export const UPDATE_QRDATA = 'UPDATE_QRDATA';
 export const EDIT_PRICE = 'EDIT_PRICE';
 export const EDIT_PRICEPID = 'EDIT_PRICEPID';
 export const QTY_INCRIMENT = 'QTY_INCRIMENT';
+export const LOGIN_ERROR = 'LOGIN_ERROR';

@@ -4,6 +4,7 @@ import {
   USER_LOGOUT,
   LOGGED,
   LOGGED_LOADING,
+  LOGIN_ERROR,
 } from './types';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -88,12 +89,11 @@ export const userLoginAction =
             dispatch(LoggedAction(userToken));
           })();
 
-          dispatch(authLoadingAction());
           dispatch({
             type: USER_LOGIN,
             payload: serverResponse.token,
           });
-          // dispatch(LoggedAction());
+
           Toast.show({
             text1: 'User Login Successfully',
             visibilityTime: 2000,
@@ -102,8 +102,11 @@ export const userLoginAction =
             type: 'success',
           });
         } else {
+          dispatch({
+            type: LOGIN_ERROR,
+          });
           Toast.show({
-            text1: 'User Login failed.',
+            text1: 'Please enter valid username & password',
             visibilityTime: 3000,
             autoHide: true,
             position: 'top',
@@ -112,7 +115,9 @@ export const userLoginAction =
         }
       })
       .catch(error => {
-        dispatch(authLoadingAction());
+        dispatch({
+          type: LOGIN_ERROR,
+        });
         Toast.show({
           text1: 'Server response failed',
           visibilityTime: 3000,

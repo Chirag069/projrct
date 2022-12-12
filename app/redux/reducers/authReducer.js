@@ -5,6 +5,7 @@ import {
   USER_DATA,
   LOGGED,
   LOGGED_LOADING,
+  LOGIN_ERROR,
 } from '../actions/types';
 
 const initialState = {
@@ -38,6 +39,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         authLoading: true,
+      };
+    case LOGIN_ERROR:
+      return {
+        ...state,
+        authLoading: false,
       };
     case LOGGED_LOADING:
       return {

@@ -138,7 +138,6 @@ export default (state = initialState, action) => {
       return {
         ...state,
         qrdata: state.qrdata.map(item => {
-          console.log(action.payload, item.key);
           return action.payload === item.key
             ? {
                 ...item,

@@ -40,7 +40,7 @@ const AppNav = () => {
           }}>
           <ActivityIndicator
             animating={loggedLoading || authLoading}
-            color={'#c79248'}
+            color={'#9ECED9'}
             size={scale(30)}
           />
         </View>

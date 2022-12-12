@@ -97,6 +97,7 @@ const SignIn = () => {
                 placeholderTextColor={'#666666'}
                 activeUnderlineColor={'#000000'}
                 underlineColor="black"
+                autoCapitalize="none"
                 style={{
                   backgroundColor: 'white',
                   fontSize: scale(15),
