@@ -49,13 +49,13 @@ const CreateBill = ({navigation}) => {
     onchange();
   }, []);
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      setQrcode('');
-    });
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //     setQrcode('');
+  //   });
 
-    return unsubscribe;
-  }, [navigation]);
+  //   return unsubscribe;
+  // }, [navigation]);
 
   const removebillitem = index => {
     dispatch(qrdatadeleteAction(index));
@@ -108,24 +108,10 @@ const CreateBill = ({navigation}) => {
     }
   };
 
+  const refInput = React.useRef(null);
+
   return (
     <>
-      {/* {qrLoading ? (
-        <View
-          style={{
-            marginTop: 'auto',
-            marginBottom: 'auto',
-            alignItems: 'center',
-            paddingVertical: verticalScale(20),
-          }}>
-          <StatusBar backgroundColor={'#9ECED9'} barStyle="dark-content" />
-          <ActivityIndicator
-            animating={qrLoading}
-            color={'#9ECED9'}
-            size={scale(30)}
-          />
-        </View>
-      ) : ( */}
       <SafeAreaView style={{backgroundColor: '#FFF', flex: 1}}>
         <StatusBar backgroundColor={'#9ECED9'} barStyle="dark-content" />
         <CreateBillModel navigation={navigation} />
@@ -141,6 +127,7 @@ const CreateBill = ({navigation}) => {
             activeUnderlineColor={'#9ECED9'}
             underlineColor="black"
             keyboardType="numeric"
+            ref={refInput}
             style={{
               backgroundColor: 'white',
               fontSize: scale(15),
@@ -168,6 +155,7 @@ const CreateBill = ({navigation}) => {
                 if (qrdata.length == 0) {
                   dispatch(qrdataAction(Token, qrcode));
                   setQrcode([]);
+                  refInput.current.focus();
                 } else {
                   var len = qrdata.length;
                   var duplicate = 0;
@@ -182,13 +170,29 @@ const CreateBill = ({navigation}) => {
                   if (duplicate === 1) {
                     dispatch(qtyincrimentAction(qrcode));
                     setQrcode([]);
+                    refInput.current.focus();
                   } else {
                     dispatch(qrdataAction(Token, qrcode));
                     setQrcode([]);
+                    refInput.current.focus();
                   }
                 }
               }}
             />
+
+            {/* <CustomButton
+              buttoncolor={'#9ECED9'}
+              buttonwidth={scale(330)}
+              buttonheight={verticalScale(35)}
+              borderradius={scale(5)}
+              text={'SUBMIT'}
+              fontFamily={'Cairo-Regular'}
+              fontcolor={'#333'}
+              fontSize={scale(17)}
+              onPress={() => {
+                refInput.current.focus();
+              }}
+            /> */}
           </View>
           {qrLoading ? (
             <View
@@ -364,7 +368,6 @@ const CreateBill = ({navigation}) => {
           />
         </View>
       </SafeAreaView>
-      {/* )} */}
     </>
   );
 };

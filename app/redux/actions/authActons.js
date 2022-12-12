@@ -8,6 +8,7 @@ import {
 } from './types';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import NetInfo from '@react-native-community/netinfo';
 
 export const authLoadingAction =
   (loading = false) =>
@@ -52,78 +53,115 @@ export const authLogOutAction = () => async dispatch => {
 export const userLoginAction =
   (userName = '', userPassword = '') =>
   dispatch => {
-    dispatch(authLoadingAction(true));
-    var myHeaders = new Headers();
-    myHeaders.append(
-      'Authorization',
-      'Bearer thsJ4[pR3=bM5^gJ0]pS6.gI2$hV5*uSwq',
-    );
-    myHeaders.append('Content-Type', 'application/json');
-
-    var raw = JSON.stringify({
-      username: userName,
-      password: userPassword,
+    dispatch({
+      type: AUTH_LOADING,
     });
+    try {
+      var myHeaders = new Headers();
+      myHeaders.append(
+        'Authorization',
+        'Bearer thsJ4[pR3=bM5^gJ0]pS6.gI2$hV5*uSwq',
+      );
+      myHeaders.append('Content-Type', 'application/json');
 
-    var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: raw,
-      redirect: 'follow',
-    };
+      var raw = JSON.stringify({
+        username: userName,
+        password: userPassword,
+      });
 
-    fetch('https://nts.dhyaravi.com/outward_ipa/register/login', requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        let serverResponse = result;
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      };
 
-        if (serverResponse.status == true) {
-          if (serverResponse && serverResponse.token) {
+      fetch(
+        'https://nts.dhyaravi.com/outward_ipa/register/login',
+        requestOptions,
+      )
+        .then(response => response.json())
+        .then(result => {
+          let serverResponse = result;
+
+          if (serverResponse?.status) {
+            if (serverResponse && serverResponse.token) {
+              (async () => {
+                await AsyncStorage.setItem('@user_token', serverResponse.token);
+              })();
+            }
+
             (async () => {
-              await AsyncStorage.setItem('@user_token', serverResponse.token);
+              const userToken = await AsyncStorage.getItem('@user_token');
+              dispatch(LoggedAction(userToken));
             })();
+
+            dispatch({
+              type: USER_LOGIN,
+              payload: serverResponse.token,
+            });
+
+            Toast.show({
+              text1: 'User Login Successfully',
+              visibilityTime: 2000,
+              autoHide: true,
+              position: 'top',
+              type: 'success',
+            });
+          } else {
+            dispatch({
+              type: LOGIN_ERROR,
+            });
+            NetInfo.fetch().then(state => {
+              if (state.isConnected) {
+                Toast.show({
+                  text1: 'Your Username or password is wrong',
+                  visibilityTime: 3000,
+                  autoHide: true,
+                  position: 'top',
+                  type: 'error',
+                });
+              } else {
+                Toast.show({
+                  text1: 'Check your Internet Connection',
+                  visibilityTime: 3000,
+                  autoHide: true,
+                  position: 'top',
+                  type: 'error',
+                });
+              }
+            });
           }
-
-          (async () => {
-            const userToken = await AsyncStorage.getItem('@user_token');
-            dispatch(LoggedAction(userToken));
-          })();
-
-          dispatch({
-            type: USER_LOGIN,
-            payload: serverResponse.token,
-          });
-
-          Toast.show({
-            text1: 'User Login Successfully',
-            visibilityTime: 2000,
-            autoHide: true,
-            position: 'top',
-            type: 'success',
-          });
-        } else {
+        })
+        .catch(error => {
+          alert(error + '');
           dispatch({
             type: LOGIN_ERROR,
           });
+        });
+    } catch (err) {
+      alert('error 2 login');
+      dispatch({
+        type: LOGIN_ERROR,
+      });
+      NetInfo.fetch().then(state => {
+        if (state.isConnected) {
           Toast.show({
-            text1: 'Please enter valid username & password',
+            text1: 'Your Username or password is wrong',
+            visibilityTime: 3000,
+            autoHide: true,
+            position: 'top',
+            type: 'error',
+          });
+        } else {
+          Toast.show({
+            text1: 'Check your Internet Connection',
             visibilityTime: 3000,
             autoHide: true,
             position: 'top',
             type: 'error',
           });
         }
-      })
-      .catch(error => {
-        dispatch({
-          type: LOGIN_ERROR,
-        });
-        Toast.show({
-          text1: 'Server response failed',
-          visibilityTime: 3000,
-          autoHide: true,
-          position: 'top',
-          type: 'error',
-        });
       });
+    }
   };

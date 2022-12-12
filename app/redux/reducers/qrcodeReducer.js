@@ -41,23 +41,12 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case QRDATA:
-      //   if (qr.key === action.payloadscncode) {
-      //   var oldValue = scannerdata.pieces,
-      //     newVal;
-      //   newVal = parseFloat(oldValue) + 1;
-      // }
-
       const qrobj = [action.payload, ...state.qrdata];
-
-      // qr.key === action.payloadscncode;
-      // ? state.qrdata.map(item =>
-      //     item.productid ? {...item, qty: parseInt(item.qty) + 1} : item,
-      //   )
-      // : '';
 
       return {
         ...state,
         qrdata: qrobj,
+        qrLoading: false,
       };
     case QRDATA_CLEAR:
       return {

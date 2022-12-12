@@ -116,7 +116,7 @@ const CreateBillModel = ({}) => {
                 borderBottomRightRadius: 0,
                 paddingHorizontal: 5,
               }}>
-              <MaterialIcons name="date-range" color={'#c79248'} size={18} />
+              <MaterialIcons name="date-range" color={'#9ECED9'} size={18} />
             </View>
 
             <View
@@ -151,7 +151,7 @@ const CreateBillModel = ({}) => {
         <View style={styles.container}>
           {renderLabel()}
           <Dropdown
-            style={[styles.dropdown, isFocus && {borderColor: '#c79248'}]}
+            style={[styles.dropdown, isFocus && {borderColor: '#9ECED9'}]}
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
@@ -179,7 +179,7 @@ const CreateBillModel = ({}) => {
                 }}>
                 <FontAwesome5
                   style={styles.icon}
-                  color={isFocus ? '#c79248' : '#c79248'}
+                  color={isFocus ? '#9ECED9' : '#9ECED9'}
                   name="user"
                   size={20}
                 />
@@ -204,12 +204,12 @@ const CreateBillModel = ({}) => {
           <View style={{marginRight: scale(20)}}>
             <CustomButton
               borderWidth={scale(1)}
-              borderColor={'#c79248'}
+              borderColor={'#9ECED9'}
               buttoncolor={'white'}
               buttonwidth={scale(120)}
               buttonheight={verticalScale(35)}
               text={'CANCEL'}
-              fontcolor={'#c79248'}
+              fontcolor={'#9ECED9'}
               fontSize={scale(15)}
               onPress={() => {
                 dispatch(toggleCreateBillModelAction());
@@ -217,7 +217,7 @@ const CreateBillModel = ({}) => {
             />
           </View>
           <CustomButton
-            buttoncolor={'#c79248'}
+            buttoncolor={'#9ECED9'}
             buttonwidth={scale(120)}
             buttonheight={verticalScale(35)}
             text={'CREATE BILL'}
