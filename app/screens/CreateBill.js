@@ -156,7 +156,7 @@ const CreateBill = ({navigation}) => {
                 marginTop: verticalScale(10),
                 marginBottom: verticalScale(10),
               }}>
-              <CustomButton
+              {/* <CustomButton
                 buttoncolor={'#9ECED9'}
                 buttonwidth={scale(330)}
                 buttonheight={verticalScale(35)}
@@ -166,7 +166,7 @@ const CreateBill = ({navigation}) => {
                 fontcolor={'#333'}
                 fontSize={scale(17)}
                 onPress={() => qrcallfunction(qrcode)}
-              />
+              /> */}
             </View>
             {qrLoading ? (
               <View

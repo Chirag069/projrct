@@ -16,6 +16,7 @@ import {
   QTY_INCRIMENT,
   BILL_SUBMIT_LOADING,
   BILL_SUBMIT_ERROR,
+  BILL_REPORT,
 } from './types';
 import Toast from 'react-native-toast-message';
 import qrcodeReducer from '../reducers/qrcodeReducer';
@@ -446,4 +447,107 @@ export const billArrayAction =
         payloadtotal: item.total,
       });
     });
+  };
+
+export const BillReportAction =
+  (tokan = '', fromdate = '', todate = '') =>
+  async dispatch => {
+    // dispatch({
+    //   type: BILL_SUBMIT_LOADING,
+    // });
+
+    try {
+      var myHeaders = new Headers();
+      myHeaders.append('Authorization', `Bearer ${tokan}`);
+      myHeaders.append('Content-Type', 'application/json');
+
+      var raw = JSON.stringify({
+        from: '2022-01-01',
+        to: '2022-12-31',
+      });
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      };
+
+      fetch(
+        'https://nts.dhyaravi.com/outward_ipa/home/get_sales_report',
+        requestOptions,
+      )
+        .then(response => response.json())
+        .then(result => {
+          const serverResponse = result;
+
+          console.log(serverResponse);
+          if (serverResponse.status) {
+            dispatch({
+              type: BILL_REPORT,
+              payload: serverResponse,
+            });
+
+            Toast.show({
+              text1: 'Report fetch successfully',
+              visibilityTime: 2000,
+              autoHide: true,
+              position: 'top',
+              type: 'success',
+            });
+          } else {
+            // dispatch({
+            //   type: BILL_SUBMIT_ERROR,
+            // });
+            NetInfo.fetch().then(state => {
+              if (state.isConnected) {
+                Toast.show({
+                  text1: serverResponse.message,
+                  visibilityTime: 3000,
+                  autoHide: true,
+                  position: 'top',
+                  type: 'error',
+                });
+              } else {
+                Toast.show({
+                  text1: 'Check your Internet Connection',
+                  visibilityTime: 3000,
+                  autoHide: true,
+                  position: 'top',
+                  type: 'error',
+                });
+              }
+            });
+          }
+        })
+        .catch(qrr => {
+          // dispatch({
+          //   type: BILL_SUBMIT_ERROR,
+          // });
+          NetInfo.fetch().then(state => {
+            if (state.isConnected) {
+              Toast.show({
+                text1: 'Something wait wrong',
+                visibilityTime: 3000,
+                autoHide: true,
+                position: 'top',
+                type: 'error',
+              });
+            } else {
+              Toast.show({
+                text1: 'Check your Internet Connection',
+                visibilityTime: 3000,
+                autoHide: true,
+                position: 'top',
+                type: 'error',
+              });
+            }
+          });
+        });
+    } catch (err) {
+      alert(err + '');
+      // dispatch({
+      //   type: BILL_SUBMIT_ERROR,
+      // });
+    }
   };

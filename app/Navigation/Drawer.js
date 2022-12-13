@@ -10,6 +10,7 @@ import SignIn from '../screens/SignIn';
 import SignUp from '../screens/SignUp';
 import CreateBill from '../screens/CreateBill';
 import Scanner from '../screens/Scanner';
+import BillReport from '../screens/BillReport';
 
 const Drawer = createDrawerNavigator();
 
@@ -35,21 +36,29 @@ export default function App() {
         drawerLabelStyle: {},
         headerShown: false,
       }}>
-      <Drawer.Screen
+      {/* <Drawer.Screen
         options={{
           headerShown: true,
           header: () => <CustomHeader />,
         }}
         name="Scanner"
         component={Scanner}
+      /> */}
+      <Drawer.Screen
+        options={{
+          headerShown: true,
+          header: () => <CustomHeader />,
+        }}
+        name="CREATE BILL"
+        component={CreateBill}
       />
       <Drawer.Screen
         options={{
           headerShown: true,
           header: () => <CustomHeader />,
         }}
-        name="CreateBill"
-        component={CreateBill}
+        name="BILL REPORT"
+        component={BillReport}
       />
     </Drawer.Navigator>
   );

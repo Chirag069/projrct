@@ -15,6 +15,7 @@ import {
   EDIT_PRICEPID,
   QTY_INCRIMENT,
   BILL_SUBMIT_LOADING,
+  BILL_REPORT,
 } from '../actions/types';
 
 const initialState = {
@@ -38,6 +39,7 @@ const initialState = {
   editprice: [],
   editpricepid: [],
   billsubmitloading: false,
+  billreport: [],
 };
 
 export default (state = initialState, action) => {
@@ -151,6 +153,11 @@ export default (state = initialState, action) => {
               }
             : item;
         }),
+      };
+    case BILL_REPORT:
+      return {
+        ...state,
+        billreport: action.payload,
       };
     default:
       return state;
