@@ -39,7 +39,7 @@ import PriceModel from '../components/Custom/PriceModel';
 import {validatePathConfig} from '@react-navigation/native';
 
 const CreateBill = ({navigation}) => {
-  const [qrcode, setQrcode] = useState('');
+  const [qrcode, setQrcode] = useState(null);
   const dispatch = useDispatch();
   const {Token} = useSelector(state => state.authState);
   const {qrdata, qrLoading, billsubmitloading} = useSelector(
@@ -48,16 +48,8 @@ const CreateBill = ({navigation}) => {
 
   useEffect(() => {
     LogBox.ignoreLogs([' Encountered two children with the same key']);
-    onchange();
+    refInput.current.focus();
   }, []);
-
-  // useEffect(() => {
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     setQrcode('');
-  //   });
-
-  //   return unsubscribe;
-  // }, [navigation]);
 
   const removebillitem = index => {
     dispatch(qrdatadeleteAction(index));
@@ -79,7 +71,7 @@ const CreateBill = ({navigation}) => {
 
   const onchange = text => {
     setQrcode(text);
-    console.log(text);
+
     if (text?.length >= 6) {
       qrcallfunction(text);
     }
@@ -88,7 +80,8 @@ const CreateBill = ({navigation}) => {
   const qrcallfunction = text => {
     if (qrdata?.length == 0) {
       dispatch(qrdataAction(Token, text));
-      setQrcode([]);
+      setQrcode(null);
+      refInput.current.focus();
     } else {
       var len = qrdata.length;
       var duplicate = 0;
@@ -102,17 +95,17 @@ const CreateBill = ({navigation}) => {
 
       if (duplicate === 1) {
         dispatch(qtyincrimentAction(text));
-        setQrcode([]);
+        setQrcode(null);
+        refInput.current.focus();
       } else {
         dispatch(qrdataAction(Token, text));
-        setQrcode([]);
+        setQrcode(null);
+        refInput.current.focus();
       }
     }
   };
 
   const refInput = React.useRef(null);
-
-  console.log(billsubmitloading);
 
   return (
     <>
@@ -155,8 +148,8 @@ const CreateBill = ({navigation}) => {
                 borderBottomWidth: 1,
               }}
               onChangeText={text => onchange(text)}
+              onSubmitEditing={() => qrcallfunction(qrcode)}
               value={qrcode}
-              onSubmitEditing={() => onchange()}
             />
             <View
               style={{
@@ -172,48 +165,8 @@ const CreateBill = ({navigation}) => {
                 fontFamily={'Cairo-Regular'}
                 fontcolor={'#333'}
                 fontSize={scale(17)}
-                onPress={() => {
-                  if (qrdata.length == 0) {
-                    dispatch(qrdataAction(Token, qrcode));
-                    setQrcode([]);
-                    refInput.current.focus();
-                  } else {
-                    var len = qrdata.length;
-                    var duplicate = 0;
-
-                    for (let i = 0; i < len; i++) {
-                      let item = qrdata[i];
-                      if (item.key === qrcode) {
-                        duplicate = +1;
-                      }
-                    }
-
-                    if (duplicate === 1) {
-                      dispatch(qtyincrimentAction(qrcode));
-                      setQrcode([]);
-                      refInput.current.focus();
-                    } else {
-                      dispatch(qrdataAction(Token, qrcode));
-                      setQrcode([]);
-                      refInput.current.focus();
-                    }
-                  }
-                }}
+                onPress={() => qrcallfunction(qrcode)}
               />
-
-              {/* <CustomButton
-              buttoncolor={'#9ECED9'}
-              buttonwidth={scale(330)}
-              buttonheight={verticalScale(35)}
-              borderradius={scale(5)}
-              text={'SUBMIT'}
-              fontFamily={'Cairo-Regular'}
-              fontcolor={'#333'}
-              fontSize={scale(17)}
-              onPress={() => {
-                refInput.current.focus();
-              }}
-            /> */}
             </View>
             {qrLoading ? (
               <View
