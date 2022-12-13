@@ -14,6 +14,7 @@ import {
   EDIT_PRICE,
   EDIT_PRICEPID,
   QTY_INCRIMENT,
+  BILL_SUBMIT_LOADING,
 } from '../actions/types';
 
 const initialState = {
@@ -36,6 +37,7 @@ const initialState = {
   priceModalShow: false,
   editprice: [],
   editpricepid: [],
+  billsubmitloading: false,
 };
 
 export default (state = initialState, action) => {
@@ -62,6 +64,16 @@ export default (state = initialState, action) => {
       return {
         ...state,
         qrLoading: action.payload,
+      };
+    case BILL_SUBMIT_LOADING:
+      return {
+        ...state,
+        billsubmitloading: true,
+      };
+    case BILL_SUBMIT_LOADING:
+      return {
+        ...state,
+        billsubmitloading: false,
       };
     case QRLIST:
       return {
@@ -93,6 +105,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         createbillstatus: action.payload,
+        billsubmitloading: false,
       };
     case QTY_MODEL:
       return {

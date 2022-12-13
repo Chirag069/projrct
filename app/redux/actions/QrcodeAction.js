@@ -14,6 +14,8 @@ import {
   PRICE_MODEL,
   EDIT_PRICEPID,
   QTY_INCRIMENT,
+  BILL_SUBMIT_LOADING,
+  BILL_SUBMIT_ERROR,
 } from './types';
 import Toast from 'react-native-toast-message';
 import qrcodeReducer from '../reducers/qrcodeReducer';
@@ -24,6 +26,15 @@ export const qrLoadingAction =
   dispatch => {
     dispatch({
       type: QRLOADING,
+      payload: loading,
+    });
+  };
+
+export const billSubmitLoadingAction =
+  (loading = false) =>
+  dispatch => {
+    dispatch({
+      type: BILL_SUBMIT_LOADING,
       payload: loading,
     });
   };
@@ -319,58 +330,106 @@ export const SubmiBillAction =
     color = '',
   ) =>
   async dispatch => {
-    var myHeaders = new Headers();
-    myHeaders.append('Authorization', `Bearer ${tokan}`);
+    dispatch({
+      type: BILL_SUBMIT_LOADING,
+    });
 
-    var formdata = new FormData();
-    formdata.append('date', date);
-    formdata.append('customer_id', customerId);
-    formdata.append('product_id[]', productId);
-    formdata.append('total[]', color);
-    formdata.append('quantity[]', qty);
-    formdata.append('pieces[]', pieces);
-    formdata.append('price[]', price);
-    formdata.append('total[]', total);
+    try {
+      var myHeaders = new Headers();
+      myHeaders.append('Authorization', `Bearer ${tokan}`);
 
-    var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: formdata,
-      redirect: 'follow',
-    };
+      var formdata = new FormData();
+      formdata.append('date', date);
+      formdata.append('customer_id', customerId);
+      formdata.append('product_id[]', productId);
+      formdata.append('total[]', color);
+      formdata.append('quantity[]', qty);
+      formdata.append('pieces[]', pieces);
+      formdata.append('price[]', price);
+      formdata.append('total[]', total);
 
-    fetch(
-      'https://nts.dhyaravi.com/outward_ipa/home/submit_bill',
-      requestOptions,
-    )
-      .then(response => response.json())
-      .then(result => {
-        const serverResponse = result;
-        if (serverResponse.success == 1) {
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: formdata,
+        redirect: 'follow',
+      };
+
+      fetch(
+        'https://nts.dhyaravi.com/outward_ipa/home/submit_bill',
+        requestOptions,
+      )
+        .then(response => response.json())
+        .then(result => {
+          const serverResponse = result;
+          if (serverResponse.success == 1) {
+            dispatch({
+              type: SUBMIT_BILL,
+              payload: serverResponse.success,
+            });
+
+            Toast.show({
+              text1: serverResponse.message,
+              visibilityTime: 2000,
+              autoHide: true,
+              position: 'top',
+              type: 'success',
+            });
+          } else {
+            dispatch({
+              type: BILL_SUBMIT_ERROR,
+            });
+            NetInfo.fetch().then(state => {
+              if (state.isConnected) {
+                Toast.show({
+                  text1: serverResponse.message,
+                  visibilityTime: 3000,
+                  autoHide: true,
+                  position: 'top',
+                  type: 'error',
+                });
+              } else {
+                Toast.show({
+                  text1: 'Check your Internet Connection',
+                  visibilityTime: 3000,
+                  autoHide: true,
+                  position: 'top',
+                  type: 'error',
+                });
+              }
+            });
+          }
+        })
+        .catch(qrr => {
           dispatch({
-            type: SUBMIT_BILL,
-            payload: serverResponse.success,
+            type: BILL_SUBMIT_ERROR,
           });
-
-          Toast.show({
-            text1: serverResponse.message,
-            visibilityTime: 2000,
-            autoHide: true,
-            position: 'top',
-            type: 'success',
+          NetInfo.fetch().then(state => {
+            if (state.isConnected) {
+              Toast.show({
+                text1: 'Something wait wrong',
+                visibilityTime: 3000,
+                autoHide: true,
+                position: 'top',
+                type: 'error',
+              });
+            } else {
+              Toast.show({
+                text1: 'Check your Internet Connection',
+                visibilityTime: 3000,
+                autoHide: true,
+                position: 'top',
+                type: 'error',
+              });
+            }
           });
-        } else {
-          dispatch(qrLoadingAction());
-          Toast.show({
-            text1: serverResponse.message,
-            visibilityTime: 2000,
-            autoHide: true,
-            position: 'top',
-            type: 'error',
-          });
-        }
-      })
-      .catch(error => console.log('error', error));
+        });
+    } catch (err) {
+      alert(err + '');
+      dispatch({
+        type: BILL_SUBMIT_ERROR,
+      });
+    }
   };
 
 export const billArrayAction =
