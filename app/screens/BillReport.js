@@ -1,4 +1,10 @@
-import {View, Text, SafeAreaView, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  TouchableOpacity,
+  FlatList,
+} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -14,6 +20,7 @@ const BillReport = () => {
   const {billreport} = useSelector(state => state.qrState);
 
   console.log(billreport);
+
   // ************* from date ************** //
 
   const [fromdate, setfromDate] = useState(new Date());
@@ -239,11 +246,122 @@ const BillReport = () => {
             buttonwidth={scale(330)}
             buttonheight={verticalScale(35)}
             borderradius={scale(5)}
-            text={'REPORT'}
+            text={'FETCH'}
             fontFamily={'Cairo-Regular'}
             fontcolor={'#333'}
             fontSize={scale(17)}
             onPress={() => dispatch(BillReportAction(Token, fromtext, text))}
+          />
+        </View>
+        <View>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            style={{
+              paddingHorizontal: scale(5),
+              backgroundColor: '#F5F5F5',
+              height: verticalScale(490),
+            }}
+            contentContainerStyle={{
+              paddingBottom: verticalScale(10),
+              paddingTop: verticalScale(10),
+            }}
+            data={billreport}
+            horizontal={false}
+            numColumns={1}
+            keyExtractor={item => {
+              return item?.product_id;
+            }}
+            ItemSeparatorComponent={() => {
+              return <View style={{marginVertical: verticalScale(1)}} />;
+            }}
+            renderItem={post => {
+              const item = post?.item;
+              console.log(item);
+              //   const index = item?.productid;
+              return (
+                <View
+                  style={{
+                    shadowColor: '#000',
+                    shadowOffset: {
+                      width: 0,
+                      height: verticalScale(2),
+                    },
+                    shadowOpacity: 0.25,
+                    shadowRadius: 4,
+                    elevation: 7,
+                    backgroundColor: '#FFFFFF',
+                    paddingHorizontal: scale(10),
+                    marginVertical: verticalScale(5),
+                    marginHorizontal: scale(10),
+                    borderRadius: 5,
+                    paddingVertical: verticalScale(5),
+                  }}>
+                  <View>
+                    <View
+                      style={{
+                        marginHorizontal: scale(10),
+                        alignItems: 'center',
+                      }}>
+                      <Text
+                        style={{
+                          fontSize: verticalScale(15),
+                          color: '#E47946',
+                          fontFamily: 'Cairo-Black',
+                        }}>
+                        {item?.customer}
+                      </Text>
+                    </View>
+
+                    <View
+                      style={{
+                        marginTop: 10,
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <Text
+                        style={{
+                          fontSize: verticalScale(13),
+                          color: 'black',
+                          fontFamily: 'Cairo-Regular',
+                          marginBottom: verticalScale(5),
+                        }}>
+                        Bill No. :-{item.bill_no}
+                      </Text>
+
+                      <Text
+                        style={{
+                          fontSize: verticalScale(13),
+                          color: 'black',
+                          fontFamily: 'Cairo-Regular',
+                          marginBottom: verticalScale(5),
+                        }}>
+                        Invoice id :-{item.invoice_id}
+                      </Text>
+
+                      <Text
+                        style={{
+                          fontSize: verticalScale(13),
+                          color: 'black',
+                          fontFamily: 'Cairo-Regular',
+                          marginBottom: verticalScale(5),
+                        }}>
+                        Qty :-{item.qty}
+                      </Text>
+
+                      <Text
+                        style={{
+                          fontSize: verticalScale(13),
+                          color: 'black',
+                          fontFamily: 'Cairo-Regular',
+                          marginBottom: verticalScale(5),
+                        }}>
+                        Total :-{item.total}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              );
+            }}
           />
         </View>
       </View>

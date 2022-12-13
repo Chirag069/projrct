@@ -48,7 +48,7 @@ const CreateBill = ({navigation}) => {
 
   useEffect(() => {
     LogBox.ignoreLogs([' Encountered two children with the same key']);
-    refInput.current.focus();
+    // refInput.current.focus();
   }, []);
 
   const removebillitem = index => {
