@@ -24,12 +24,11 @@ const BillReport = () => {
   const {Token} = useSelector(state => state.authState);
   const {billreport, reportloading} = useSelector(state => state.qrState);
 
-  console.log(reportloading);
-
-  const viewFullPdfPress = invoiceid => {
+  const viewFullPdfPress = item => {
     navigation.navigate('PDF', {
-      invoiceId: invoiceid,
-      pdfUrl: `http://rd.ragingdevelopers.com/svira/svira1api/order_temp/order_view/${invoiceid}`,
+      invoiceId: item.invoice_id,
+      billdata: item,
+      pdfUrl: `http://rd.ragingdevelopers.com/svira/svira1api/order_temp/order_view/${item.invoice_id}`,
     });
   };
 
@@ -106,8 +105,12 @@ const BillReport = () => {
           paddingLeft: scale(15),
           paddingVertical: verticalScale(10),
           backgroundColor: '#FFFFFF',
+          borderBottomColor: '#9ECED9',
+          borderBottomWidth: scale(0.2),
+          flexDirection: 'row',
+          justifyContent: 'space-between',
         }}>
-        <Text style={{color: '#E47946', fontWeight: 'normal', fontSize: 19}}>
+        <Text style={{color: '#9ECED9', fontWeight: 'normal', fontSize: 19}}>
           REPORT
         </Text>
       </View>
@@ -341,8 +344,7 @@ const BillReport = () => {
               }}
               renderItem={post => {
                 const item = post?.item;
-                // console.log(item);
-                //   const index = item?.productid;
+
                 return (
                   <View
                     style={{
@@ -362,7 +364,7 @@ const BillReport = () => {
                       paddingVertical: verticalScale(5),
                     }}>
                     <TouchableOpacity
-                      onPress={() => viewFullPdfPress(item.invoice_id)}
+                      onPress={() => viewFullPdfPress(item)}
                       style={{
                         position: 'absolute',
                         right: 0,
