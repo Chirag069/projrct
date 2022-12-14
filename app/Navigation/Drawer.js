@@ -11,6 +11,7 @@ import SignUp from '../screens/SignUp';
 import CreateBill from '../screens/CreateBill';
 import Scanner from '../screens/Scanner';
 import BillReport from '../screens/BillReport';
+import PDFExample from '../screens/pdf';
 
 const Drawer = createDrawerNavigator();
 

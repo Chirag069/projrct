@@ -16,6 +16,8 @@ import {
   QTY_INCRIMENT,
   BILL_SUBMIT_LOADING,
   BILL_REPORT,
+  REPORT_LOADING,
+  REPORT_ERROR,
 } from '../actions/types';
 
 const initialState = {
@@ -40,6 +42,8 @@ const initialState = {
   editpricepid: [],
   billsubmitloading: false,
   billreport: [],
+  billpdf: [],
+  reportloading: false,
 };
 
 export default (state = initialState, action) => {
@@ -72,11 +76,7 @@ export default (state = initialState, action) => {
         ...state,
         billsubmitloading: true,
       };
-    case BILL_SUBMIT_LOADING:
-      return {
-        ...state,
-        billsubmitloading: false,
-      };
+
     case QRLIST:
       return {
         ...state,
@@ -158,7 +158,19 @@ export default (state = initialState, action) => {
       return {
         ...state,
         billreport: action.payload,
+        reportloading: false,
       };
+    case REPORT_LOADING:
+      return {
+        ...state,
+        reportloading: true,
+      };
+    case REPORT_ERROR:
+      return {
+        ...state,
+        reportloading: false,
+      };
+
     default:
       return state;
   }

@@ -4,6 +4,9 @@ import {
   SafeAreaView,
   TouchableOpacity,
   FlatList,
+  Image,
+  StatusBar,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -13,13 +16,22 @@ import {scale, verticalScale, moderateScale} from 'react-native-size-matters';
 import CustomButton from '../components/Custom/CustomButton';
 import {useDispatch, useSelector} from 'react-redux';
 import {BillReportAction} from '../redux/actions/QrcodeAction';
+import {useNavigation} from '@react-navigation/native';
 
 const BillReport = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const {Token} = useSelector(state => state.authState);
-  const {billreport} = useSelector(state => state.qrState);
+  const {billreport, reportloading} = useSelector(state => state.qrState);
 
-  console.log(billreport);
+  console.log(reportloading);
+
+  const viewFullPdfPress = invoiceid => {
+    navigation.navigate('PDF', {
+      invoiceId: invoiceid,
+      pdfUrl: `http://rd.ragingdevelopers.com/svira/svira1api/order_temp/order_view/${invoiceid}`,
+    });
+  };
 
   // ************* from date ************** //
 
@@ -89,6 +101,17 @@ const BillReport = () => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#F5F5F5'}}>
+      <View
+        style={{
+          paddingLeft: scale(15),
+          paddingVertical: verticalScale(10),
+          backgroundColor: '#FFFFFF',
+        }}>
+        <Text style={{color: '#E47946', fontWeight: 'normal', fontSize: 19}}>
+          REPORT
+        </Text>
+      </View>
+
       <View
         style={{
           marginHorizontal: scale(10),
@@ -253,116 +276,173 @@ const BillReport = () => {
             onPress={() => dispatch(BillReportAction(Token, fromtext, text))}
           />
         </View>
-        <View>
-          <FlatList
-            showsVerticalScrollIndicator={false}
+
+        {reportloading ? (
+          <View
             style={{
-              paddingHorizontal: scale(5),
-              backgroundColor: '#F5F5F5',
-              height: verticalScale(490),
-            }}
-            contentContainerStyle={{
-              paddingBottom: verticalScale(10),
-              paddingTop: verticalScale(10),
-            }}
-            data={billreport}
-            horizontal={false}
-            numColumns={1}
-            keyExtractor={item => {
-              return item?.product_id;
-            }}
-            ItemSeparatorComponent={() => {
-              return <View style={{marginVertical: verticalScale(1)}} />;
-            }}
-            renderItem={post => {
-              const item = post?.item;
-              console.log(item);
-              //   const index = item?.productid;
-              return (
-                <View
-                  style={{
-                    shadowColor: '#000',
-                    shadowOffset: {
-                      width: 0,
-                      height: verticalScale(2),
-                    },
-                    shadowOpacity: 0.25,
-                    shadowRadius: 4,
-                    elevation: 7,
-                    backgroundColor: '#FFFFFF',
-                    paddingHorizontal: scale(10),
-                    marginVertical: verticalScale(5),
-                    marginHorizontal: scale(10),
-                    borderRadius: 5,
-                    paddingVertical: verticalScale(5),
-                  }}>
-                  <View>
-                    <View
+              backgroundColor: '#f5f5f5',
+              alignItems: 'center',
+              paddingVertical: verticalScale(5),
+            }}>
+            <StatusBar backgroundColor={'#9ECED9'} barStyle="dark-content" />
+            <ActivityIndicator
+              animating={reportloading}
+              color={'#9ECED9'}
+              size={scale(30)}
+            />
+          </View>
+        ) : (
+          <View />
+        )}
+
+        <View style={{}}>
+          {billreport.length === 0 ? (
+            <View
+              style={{
+                backgroundColor: '#f5f5f5',
+                alignItems: 'center',
+                paddingVertical: verticalScale(130),
+                paddingBottom: 'auto',
+              }}>
+              <Image
+                style={{width: scale(350), height: scale(200)}}
+                source={require('../assets/Images/vector1.png')}
+              />
+              <Text
+                style={{
+                  fontFamily: 'Cairo-Regular',
+                  fontSize: scale(15),
+                  color: 'grey',
+                }}>
+                Report not Available
+              </Text>
+            </View>
+          ) : (
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              style={{
+                paddingHorizontal: scale(5),
+                backgroundColor: '#F5F5F5',
+
+                height: verticalScale(490),
+              }}
+              contentContainerStyle={{
+                paddingBottom: verticalScale(10),
+                paddingTop: verticalScale(10),
+              }}
+              data={billreport}
+              horizontal={false}
+              numColumns={1}
+              keyExtractor={item => {
+                return item?.product_id;
+              }}
+              ItemSeparatorComponent={() => {
+                return <View style={{marginVertical: verticalScale(1)}} />;
+              }}
+              renderItem={post => {
+                const item = post?.item;
+                // console.log(item);
+                //   const index = item?.productid;
+                return (
+                  <View
+                    style={{
+                      shadowColor: '#000',
+                      shadowOffset: {
+                        width: 0,
+                        height: verticalScale(2),
+                      },
+                      shadowOpacity: 0.25,
+                      shadowRadius: 4,
+                      elevation: 7,
+                      backgroundColor: '#FFFFFF',
+                      paddingHorizontal: scale(10),
+                      marginVertical: verticalScale(5),
+                      marginHorizontal: scale(10),
+                      borderRadius: 5,
+                      paddingVertical: verticalScale(5),
+                    }}>
+                    <TouchableOpacity
+                      onPress={() => viewFullPdfPress(item.invoice_id)}
                       style={{
-                        marginHorizontal: scale(10),
-                        alignItems: 'center',
+                        position: 'absolute',
+                        right: 0,
+                        marginTop: verticalScale(5),
+                        marginRight: verticalScale(5),
                       }}>
-                      <Text
-                        style={{
-                          fontSize: verticalScale(15),
-                          color: '#E47946',
-                          fontFamily: 'Cairo-Black',
-                        }}>
-                        {item?.customer}
-                      </Text>
-                    </View>
+                      <Image
+                        style={{height: scale(25), width: scale(25)}}
+                        source={require('../assets/Images/pdf-file1.png')}
+                      />
+                    </TouchableOpacity>
 
-                    <View
-                      style={{
-                        marginTop: 10,
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}>
-                      <Text
+                    <View>
+                      <View
                         style={{
-                          fontSize: verticalScale(13),
-                          color: 'black',
-                          fontFamily: 'Cairo-Regular',
-                          marginBottom: verticalScale(5),
+                          marginHorizontal: scale(10),
+                          alignItems: 'center',
                         }}>
-                        Bill No. :-{item.bill_no}
-                      </Text>
+                        <Text
+                          style={{
+                            fontSize: verticalScale(15),
+                            color: '#E47946',
+                            fontFamily: 'Cairo-Black',
+                          }}>
+                          {item?.customer}
+                        </Text>
+                      </View>
 
-                      <Text
+                      <View
                         style={{
-                          fontSize: verticalScale(13),
-                          color: 'black',
-                          fontFamily: 'Cairo-Regular',
-                          marginBottom: verticalScale(5),
+                          marginTop: 10,
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
                         }}>
-                        Invoice id :-{item.invoice_id}
-                      </Text>
+                        <Text
+                          style={{
+                            fontSize: verticalScale(13),
+                            color: 'black',
+                            fontFamily: 'Cairo-Regular',
+                            marginBottom: verticalScale(5),
+                          }}>
+                          Bill No. :-{item.bill_no}
+                        </Text>
 
-                      <Text
-                        style={{
-                          fontSize: verticalScale(13),
-                          color: 'black',
-                          fontFamily: 'Cairo-Regular',
-                          marginBottom: verticalScale(5),
-                        }}>
-                        Qty :-{item.qty}
-                      </Text>
+                        <Text
+                          style={{
+                            fontSize: verticalScale(13),
+                            color: 'black',
+                            fontFamily: 'Cairo-Regular',
+                            marginBottom: verticalScale(5),
+                          }}>
+                          Invoice id :-{item.invoice_id}
+                        </Text>
 
-                      <Text
-                        style={{
-                          fontSize: verticalScale(13),
-                          color: 'black',
-                          fontFamily: 'Cairo-Regular',
-                          marginBottom: verticalScale(5),
-                        }}>
-                        Total :-{item.total}
-                      </Text>
+                        <Text
+                          style={{
+                            fontSize: verticalScale(13),
+                            color: 'black',
+                            fontFamily: 'Cairo-Regular',
+                            marginBottom: verticalScale(5),
+                          }}>
+                          Qty :-{item.qty}
+                        </Text>
+
+                        <Text
+                          style={{
+                            fontSize: verticalScale(13),
+                            color: 'black',
+                            fontFamily: 'Cairo-Regular',
+                            marginBottom: verticalScale(5),
+                          }}>
+                          Total :-{item.total}
+                        </Text>
+                      </View>
                     </View>
                   </View>
-                </View>
-              );
-            }}
-          />
+                );
+              }}
+            />
+          )}
         </View>
       </View>
     </SafeAreaView>

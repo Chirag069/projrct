@@ -4,6 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import Drawer from '../Navigation/Drawer';
 import Index from './Index';
+import PDFExample from '../screens/pdf';
 
 const Stack = createNativeStackNavigator();
 
@@ -14,6 +15,7 @@ const StackNav = () => {
         headerShown: false,
       }}>
       <Stack.Screen name="Drawer" component={Drawer} />
+      <Stack.Screen name="PDF" component={PDFExample} />
     </Stack.Navigator>
   );
 };

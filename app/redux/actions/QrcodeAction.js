@@ -17,6 +17,8 @@ import {
   BILL_SUBMIT_LOADING,
   BILL_SUBMIT_ERROR,
   BILL_REPORT,
+  REPORT_ERROR,
+  REPORT_LOADING,
 } from './types';
 import Toast from 'react-native-toast-message';
 import qrcodeReducer from '../reducers/qrcodeReducer';
@@ -454,9 +456,9 @@ export const billArrayAction =
 export const BillReportAction =
   (tokan = '', fromdate = '', todate = '') =>
   async dispatch => {
-    // dispatch({
-    //   type: BILL_SUBMIT_LOADING,
-    // });
+    dispatch({
+      type: REPORT_LOADING,
+    });
 
     try {
       var myHeaders = new Headers();
@@ -497,9 +499,9 @@ export const BillReportAction =
               type: 'success',
             });
           } else {
-            // dispatch({
-            //   type: BILL_SUBMIT_ERROR,
-            // });
+            dispatch({
+              type: REPORT_ERROR,
+            });
             NetInfo.fetch().then(state => {
               if (state.isConnected) {
                 Toast.show({
@@ -522,9 +524,9 @@ export const BillReportAction =
           }
         })
         .catch(qrr => {
-          // dispatch({
-          //   type: BILL_SUBMIT_ERROR,
-          // });
+          dispatch({
+            type: REPORT_ERROR,
+          });
           NetInfo.fetch().then(state => {
             if (state.isConnected) {
               Toast.show({
@@ -547,8 +549,8 @@ export const BillReportAction =
         });
     } catch (err) {
       alert(err + '');
-      // dispatch({
-      //   type: BILL_SUBMIT_ERROR,
-      // });
+      dispatch({
+        type: REPORT_ERROR,
+      });
     }
   };

@@ -156,7 +156,7 @@ const CreateBill = ({navigation}) => {
                 marginTop: verticalScale(10),
                 marginBottom: verticalScale(10),
               }}>
-              {/* <CustomButton
+              <CustomButton
                 buttoncolor={'#9ECED9'}
                 buttonwidth={scale(330)}
                 buttonheight={verticalScale(35)}
@@ -166,7 +166,7 @@ const CreateBill = ({navigation}) => {
                 fontcolor={'#333'}
                 fontSize={scale(17)}
                 onPress={() => qrcallfunction(qrcode)}
-              /> */}
+              />
             </View>
             {qrLoading ? (
               <View
@@ -194,13 +194,21 @@ const CreateBill = ({navigation}) => {
               style={{
                 backgroundColor: '#f5f5f5',
                 alignItems: 'center',
-                paddingVertical: verticalScale(130),
+                paddingVertical: verticalScale(140),
                 paddingBottom: 'auto',
               }}>
               <Image
-                style={{width: scale(250), height: scale(250)}}
-                source={require('../assets/Images/nodata.png')}
+                style={{width: scale(250), height: scale(200)}}
+                source={require('../assets/Images/nodata1.png')}
               />
+              <Text
+                style={{
+                  fontFamily: 'Cairo-Regular',
+                  fontSize: scale(15),
+                  color: 'grey',
+                }}>
+                Bill not found
+              </Text>
             </View>
           ) : (
             <FlatList
