@@ -110,7 +110,13 @@ const BillReport = () => {
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}>
-        <Text style={{color: '#9ECED9', fontWeight: 'normal', fontSize: 19}}>
+        <Text
+          style={{
+            color: '#9ECED9',
+            fontWeight: 'normal',
+            fontSize: 19,
+            fontFamily: 'Cairo-Regular',
+          }}>
           REPORT
         </Text>
       </View>
