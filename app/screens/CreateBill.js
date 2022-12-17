@@ -14,6 +14,7 @@ import {
   Pressable,
   Keyboard,
   refreshControl,
+  Switch,
 } from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import {scale, verticalScale, moderateScale} from 'react-native-size-matters';
@@ -52,6 +53,8 @@ const CreateBill = ({navigation}) => {
   );
   const refInput = useRef();
   const [focus, setFocus] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   const removebillitem = index => {
     dispatch(qrdatadeleteAction(index));
@@ -105,8 +108,10 @@ const CreateBill = ({navigation}) => {
   };
 
   useEffect(() => {
-    refInput.current.focus();
+    isEnabled ? refInput.current.focus() : null;
   }, [qrcallfunction]);
+
+  console.log(isEnabled);
 
   return (
     <>
@@ -126,11 +131,42 @@ const CreateBill = ({navigation}) => {
           />
         </View>
       ) : (
-        <SafeAreaView style={{backgroundColor: '#FFF', flex: 1}}>
+        <SafeAreaView style={{backgroundColor: '#F5F5F5', flex: 1}}>
           <StatusBar backgroundColor={'#9ECED9'} barStyle="dark-content" />
           <CreateBillModel navigation={navigation} />
           <QtyModel navigation={navigation} />
           <PriceModel navigation={navigation} />
+
+          <View
+            style={{
+              paddingLeft: scale(15),
+              paddingVertical: verticalScale(7),
+              backgroundColor: '#FFFFFF',
+              borderBottomColor: '#9ECED9',
+              borderBottomWidth: scale(0.2),
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <Text
+              style={{
+                color: '#9ECED9',
+                fontWeight: 'normal',
+                fontSize: scale(20),
+                fontFamily: 'Cairo-Regular',
+              }}>
+              Scanner
+            </Text>
+            <View style={{marginRight: scale(5), justifyContent: 'center'}}>
+              <Switch
+                trackColor={{false: '#767577', true: '#9ECED9'}}
+                thumbColor={isEnabled ? '#f4f3f4' : '#f4f3f4'}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+              />
+            </View>
+          </View>
+
           <View
             style={{
               marginHorizontal: scale(10),
@@ -143,11 +179,11 @@ const CreateBill = ({navigation}) => {
               keyboardType="numeric"
               autoFocus={true}
               onBlur={() => {
-                refInput.current.focus(), Keyboard.dismiss;
+                isEnabled ? refInput.current.focus() : null;
               }}
               ref={refInput}
               style={{
-                backgroundColor: 'white',
+                backgroundColor: '#F5F5F5',
                 fontSize: scale(15),
                 borderBottomWidth: 1,
               }}
@@ -198,7 +234,7 @@ const CreateBill = ({navigation}) => {
               style={{
                 backgroundColor: '#f5f5f5',
                 alignItems: 'center',
-                paddingVertical: verticalScale(140),
+                paddingVertical: verticalScale(120),
                 paddingBottom: 'auto',
               }}>
               <Image
