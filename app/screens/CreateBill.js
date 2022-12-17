@@ -10,9 +10,12 @@ import {
   Image,
   Dimensions,
   StatusBar,
+  TextInput,
+  Pressable,
+  Keyboard,
+  refreshControl,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
-import {TextInput} from 'react-native-paper';
+import React, {useState, useEffect, useRef} from 'react';
 import {scale, verticalScale, moderateScale} from 'react-native-size-matters';
 import CustomButton from '../components/Custom/CustomButton';
 import {useDispatch, useSelector} from 'react-redux';
@@ -37,19 +40,18 @@ import Toast from 'react-native-toast-message';
 import QtyModel from '../components/Custom/QtyModel';
 import PriceModel from '../components/Custom/PriceModel';
 import {validatePathConfig} from '@react-navigation/native';
+import {qrLoadingAction} from '../redux/actions/QrcodeAction';
 
 const CreateBill = ({navigation}) => {
   const [qrcode, setQrcode] = useState(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const dispatch = useDispatch();
   const {Token} = useSelector(state => state.authState);
-  const {qrdata, qrLoading, billsubmitloading} = useSelector(
+  const {qrdata, qrLoading, billsubmitloading, updateloading} = useSelector(
     state => state.qrState,
   );
-
-  useEffect(() => {
-    LogBox.ignoreLogs([' Encountered two children with the same key']);
-    // refInput.current.focus();
-  }, []);
+  const refInput = useRef();
+  const [focus, setFocus] = useState(false);
 
   const removebillitem = index => {
     dispatch(qrdatadeleteAction(index));
@@ -81,7 +83,6 @@ const CreateBill = ({navigation}) => {
     if (qrdata?.length == 0) {
       dispatch(qrdataAction(Token, text));
       setQrcode(null);
-      refInput.current.focus();
     } else {
       var len = qrdata.length;
       var duplicate = 0;
@@ -93,19 +94,19 @@ const CreateBill = ({navigation}) => {
         }
       }
 
-      if (duplicate === 1) {
+      if (duplicate == 1) {
         dispatch(qtyincrimentAction(text));
         setQrcode(null);
-        refInput.current.focus();
       } else {
         dispatch(qrdataAction(Token, text));
         setQrcode(null);
-        refInput.current.focus();
       }
     }
   };
 
-  const refInput = React.useRef(null);
+  useEffect(() => {
+    refInput.current.focus();
+  }, [qrcallfunction]);
 
   return (
     <>
@@ -141,6 +142,9 @@ const CreateBill = ({navigation}) => {
               underlineColor="black"
               keyboardType="numeric"
               autoFocus={true}
+              onBlur={() => {
+                refInput.current.focus(), Keyboard.dismiss;
+              }}
               ref={refInput}
               style={{
                 backgroundColor: 'white',
@@ -148,7 +152,7 @@ const CreateBill = ({navigation}) => {
                 borderBottomWidth: 1,
               }}
               onChangeText={text => onchange(text)}
-              onSubmitEditing={() => qrcallfunction(qrcode)}
+              // onSubmitEditing={() => qrcallfunction(qrcode)}
               value={qrcode}
             />
             <View
@@ -168,7 +172,7 @@ const CreateBill = ({navigation}) => {
                 onPress={() => qrcallfunction(qrcode)}
               />
             </View>
-            {qrLoading ? (
+            {qrLoading || updateloading ? (
               <View
                 style={{
                   backgroundColor: '#f5f5f5',
@@ -180,7 +184,7 @@ const CreateBill = ({navigation}) => {
                   barStyle="dark-content"
                 />
                 <ActivityIndicator
-                  animating={qrLoading}
+                  animating={qrLoading || updateloading}
                   color={'#9ECED9'}
                   size={scale(30)}
                 />
@@ -251,7 +255,7 @@ const CreateBill = ({navigation}) => {
                       marginHorizontal: scale(10),
                       borderRadius: 5,
                     }}>
-                    <TouchableOpacity
+                    <Pressable
                       style={{
                         position: 'absolute',
                         right: scale(5),
@@ -261,7 +265,7 @@ const CreateBill = ({navigation}) => {
                         removebillitem(index);
                       }}>
                       <AntDesign name="close" size={scale(20)} />
-                    </TouchableOpacity>
+                    </Pressable>
                     <View
                       style={{
                         marginHorizontal: scale(10),

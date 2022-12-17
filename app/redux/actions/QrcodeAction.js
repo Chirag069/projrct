@@ -19,6 +19,7 @@ import {
   BILL_REPORT,
   REPORT_ERROR,
   REPORT_LOADING,
+  UPDATE_LOADING,
 } from './types';
 import Toast from 'react-native-toast-message';
 import qrcodeReducer from '../reducers/qrcodeReducer';
@@ -55,6 +56,9 @@ export const qtyincrimentAction =
   (incrimentid = '') =>
   dispatch => {
     dispatch({
+      type: UPDATE_LOADING,
+    });
+    dispatch({
       type: QTY_INCRIMENT,
       payload: incrimentid,
     });
@@ -79,119 +83,119 @@ export const qrdataAction =
   (userToken = '', barcode = '') =>
   dispatch => {
     dispatch(qrLoadingAction(true));
+    try {
+      var myHeaders = new Headers();
+      myHeaders.append('Authorization', `Bearer ${userToken}`);
 
-    var myHeaders = new Headers();
-    myHeaders.append('Authorization', `Bearer ${userToken}`);
+      var formdata = new FormData();
+      formdata.append('barcode', barcode);
 
-    var formdata = new FormData();
-    formdata.append('barcode', barcode);
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: formdata,
+        redirect: 'follow',
+      };
 
-    var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: formdata,
-      redirect: 'follow',
-    };
+      fetch(
+        'https://nts.dhyaravi.com/outward_ipa/home/barcodedata',
+        requestOptions,
+      )
+        .then(response => response.json())
+        .then(result => {
+          let serverResponse = result;
 
-    fetch(
-      'https://nts.dhyaravi.com/outward_ipa/home/barcodedata',
-      requestOptions,
-    )
-      .then(response => response.json())
-      .then(result => {
-        let serverResponse = result;
+          dispatch(qrLoadingAction());
+          if (serverResponse?.success) {
+            const data = serverResponse.data;
 
-        dispatch(qrLoadingAction());
-        if (serverResponse?.success) {
-          const data = serverResponse.data;
+            const qr = {
+              key: barcode,
+              price: data.price,
+              pieces: data.pieces,
+              color: data.color,
+              productid: data.product_id,
+              qty: 1,
+              pname: data.pname,
+              total: (data.price * data.pieces).toFixed(2),
+              pc: data.pieces,
+            };
 
-          const qr = {
-            key: barcode,
-            price: data.price,
-            pieces: data.pieces,
-            color: data.color,
-            productid: data.product_id,
-            qty: 1,
-            pname: data.pname,
-            total: (data.price * data.pieces).toFixed(2),
-            pc: data.pieces,
-          };
-
-          dispatch({
-            type: QRDATA,
-            payload: qr,
-            payloadscncode: barcode,
+            dispatch({
+              type: QRDATA,
+              payload: qr,
+              payloadscncode: barcode,
+            });
+          } else {
+            dispatch(qrLoadingAction());
+            alert(serverResponse.message);
+            NetInfo.fetch().then(state => {
+              if (state.isConnected) {
+                Toast.show({
+                  text1: 'something wait wrong',
+                  visibilityTime: 3000,
+                  autoHide: true,
+                  position: 'top',
+                  type: 'error',
+                });
+              } else {
+                Toast.show({
+                  text1: 'Check your Internet Connection',
+                  visibilityTime: 3000,
+                  autoHide: true,
+                  position: 'top',
+                  type: 'error',
+                });
+              }
+            });
+          }
+        })
+        .catch(error => {
+          dispatch(qrLoadingAction());
+          alert(error);
+          NetInfo.fetch().then(state => {
+            if (state.isConnected) {
+              Toast.show({
+                text1: 'something wait wrong',
+                visibilityTime: 3000,
+                autoHide: true,
+                position: 'top',
+                type: 'error',
+              });
+            } else {
+              Toast.show({
+                text1: 'Check your Internet Connection',
+                visibilityTime: 3000,
+                autoHide: true,
+                position: 'top',
+                type: 'error',
+              });
+            }
+          });
+        });
+    } catch (err) {
+      alert('error 2 login');
+      dispatch(qrLoadingAction());
+      NetInfo.fetch().then(state => {
+        if (state.isConnected) {
+          Toast.show({
+            text1: 'something wait wrong',
+            visibilityTime: 3000,
+            autoHide: true,
+            position: 'top',
+            type: 'error',
           });
         } else {
-          dispatch(qrLoadingAction());
-          alert(serverResponse.message);
-          // NetInfo.fetch().then(state => {
-          //   if (state.isConnected) {
-          //     Toast.show({
-          //       text1: 'something wait wrong',
-          //       visibilityTime: 3000,
-          //       autoHide: true,
-          //       position: 'top',
-          //       type: 'error',
-          //     });
-          //   } else {
-          //     Toast.show({
-          //       text1: 'Check your Internet Connection',
-          //       visibilityTime: 3000,
-          //       autoHide: true,
-          //       position: 'top',
-          //       type: 'error',
-          //     });
-          //   }
-          // });
+          Toast.show({
+            text1: 'Check your Internet Connection',
+            visibilityTime: 3000,
+            autoHide: true,
+            position: 'top',
+            type: 'error',
+          });
         }
-      })
-      .catch(error => {
-        dispatch(qrLoadingAction());
-        alert(error);
-        // NetInfo.fetch().then(state => {
-        //   if (state.isConnected) {
-        //     Toast.show({
-        //       text1: 'something wait wrong',
-        //       visibilityTime: 3000,
-        //       autoHide: true,
-        //       position: 'top',
-        //       type: 'error',
-        //     });
-        //   } else {
-        //     Toast.show({
-        //       text1: 'Check your Internet Connection',
-        //       visibilityTime: 3000,
-        //       autoHide: true,
-        //       position: 'top',
-        //       type: 'error',
-        //     });
-        //   }
-        // });
       });
-    // } catch (err) {
-    //   alert('error 2 login');
-    //   dispatch(qrLoadingAction());
-    //   NetInfo.fetch().then(state => {
-    //     if (state.isConnected) {
-    //       Toast.show({
-    //         text1: 'something wait wrong',
-    //         visibilityTime: 3000,
-    //         autoHide: true,
-    //         position: 'top',
-    //         type: 'error',
-    //       });
-    //     } else {
-    //       Toast.show({
-    //         text1: 'Check your Internet Connection',
-    //         visibilityTime: 3000,
-    //         autoHide: true,
-    //         position: 'top',
-    //         type: 'error',
-    //       });
-    //     }
-    //   });
-    // }
+    }
   };
 
 export const toggleCreateBillModelAction = () => dispatch => {

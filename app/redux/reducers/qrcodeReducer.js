@@ -119,6 +119,7 @@ export default (state = initialState, action) => {
         ...state,
         updateqty: action.payloadqty,
       };
+
     case PRICE_MODEL:
       return {
         ...state,
