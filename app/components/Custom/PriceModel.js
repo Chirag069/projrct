@@ -10,11 +10,17 @@ import {
   toggleQtyModelAction,
   UpdateQrdataAction,
 } from '../../redux/actions/QrcodeAction';
+import {useRoute} from '@react-navigation/native';
 
 const PriceModel = () => {
+  const route = useRoute();
   const dispatch = useDispatch();
-  const {priceModalShow, editpricepid} = useSelector(state => state.qrState);
-  const [qrprice, setQrprice] = useState('');
+  const {priceModalShow, editpricepid, price, pieces} = useSelector(
+    state => state.qrState,
+  );
+
+  const [qrprice, setQrprice] = useState(price);
+  const [qrpieces, setQrpieces] = useState(pieces);
 
   return (
     <Modal animationIn="slideInUp" isVisible={priceModalShow}>
@@ -30,11 +36,40 @@ const PriceModel = () => {
         }}>
         <TextInput
           underlineColorAndroid="transparent"
-          selectionColor={'#c79248'}
+          selectionColor={'#9ECED9'}
+          placeholder="Enter Pieces"
+          placeholderTextColor="#666666"
+          keyboardType="numeric"
+          autoFocus={true}
+          style={{
+            color: '#000000',
+            fontSize: scale(17),
+            fontFamily: 'Cairo-Regular',
+            borderWidth: 0,
+          }}
+          onChangeText={setQrpieces}
+          value={qrpieces}
+        />
+        <View
+          style={{
+            marginTop: verticalScale(-5),
+            elevation: 4,
+            backgroundColor: '#9ECED9',
+            paddingVertical:
+              Dimensions.get('window').height < 600
+                ? verticalScale(0.7)
+                : verticalScale(0.6),
+          }}
+        />
+        <TextInput
+          underlineColorAndroid="transparent"
+          selectionColor={'#9ECED9'}
           placeholder="Enter Price"
           placeholderTextColor="#666666"
           keyboardType="numeric"
+          autoFocus={true}
           style={{
+            marginTop: verticalScale(5),
             color: '#000000',
             fontSize: scale(17),
             fontFamily: 'Cairo-Regular',
@@ -45,9 +80,9 @@ const PriceModel = () => {
         />
         <View
           style={{
-            marginTop: verticalScale(0),
+            marginTop: verticalScale(-5),
             elevation: 4,
-            backgroundColor: '#c79248',
+            backgroundColor: '#9ECED9',
             paddingVertical:
               Dimensions.get('window').height < 600
                 ? verticalScale(0.7)
@@ -63,13 +98,13 @@ const PriceModel = () => {
           <View style={{marginRight: scale(20)}}>
             <CustomButton
               borderWidth={scale(1)}
-              borderColor={'#c79248'}
+              borderColor={'#9ECED9'}
               buttoncolor={'white'}
               buttonwidth={scale(120)}
               fontFamily={'Cairo-Regular'}
               buttonheight={verticalScale(35)}
               text={'CANCEL'}
-              fontcolor={'#c79248'}
+              fontcolor={'#9ECED9'}
               fontSize={scale(15)}
               onPress={() => {
                 dispatch(togglepriceModelAction());
@@ -77,7 +112,7 @@ const PriceModel = () => {
             />
           </View>
           <CustomButton
-            buttoncolor={'#c79248'}
+            buttoncolor={'#9ECED9'}
             buttonwidth={scale(120)}
             buttonheight={verticalScale(35)}
             fontFamily={'Cairo-Regular'}
@@ -85,8 +120,9 @@ const PriceModel = () => {
             fontcolor={'white'}
             fontSize={scale(15)}
             onPress={() => {
-              dispatch(editPriceAction(qrprice, editpricepid));
+              dispatch(editPriceAction(qrprice, editpricepid, qrpieces));
               dispatch(togglepriceModelAction());
+              setQrprice([]);
             }}
           />
         </View>

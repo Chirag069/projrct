@@ -115,7 +115,7 @@ const BillReport = () => {
             color: '#9ECED9',
             fontWeight: 'normal',
             fontSize: 19,
-            fontFamily: 'Cairo-Regular',
+            fontFamily: 'Cairo-Black',
           }}>
           REPORT
         </Text>

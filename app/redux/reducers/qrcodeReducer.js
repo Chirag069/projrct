@@ -18,6 +18,7 @@ import {
   BILL_REPORT,
   REPORT_LOADING,
   REPORT_ERROR,
+  EDIT_PIECES,
 } from '../actions/types';
 
 const initialState = {
@@ -44,6 +45,8 @@ const initialState = {
   billreport: [],
   billpdf: [],
   reportloading: false,
+  price: [],
+  pieces: [],
 };
 
 export default (state = initialState, action) => {
@@ -114,10 +117,18 @@ export default (state = initialState, action) => {
         ...state,
         QtyModalShow: !state.QtyModalShow,
       };
-    case UPDATE_QRDATA:
+    case EDIT_PIECES:
       return {
         ...state,
-        updateqty: action.payloadqty,
+        qrdata: state.qrdata.map(item =>
+          item.productid === action.payloadeditproductid
+            ? {
+                ...item,
+                pieces: action.payloadeditpieces,
+                total: parseFloat(item.price) * action.payloadeditpieces,
+              }
+            : item,
+        ),
       };
 
     case PRICE_MODEL:
@@ -129,8 +140,14 @@ export default (state = initialState, action) => {
       return {
         ...state,
         qrdata: state.qrdata.map(item =>
-          item.product_id === action.payloadeditproductid
-            ? {...item, price: action.payloadeditprice}
+          item.productid === action.payloadeditproductid
+            ? {
+                ...item,
+                qty: action.payloadeditqty,
+                pieces: action.payloadeditpieces,
+                price: action.payloadeditprice,
+                total: action.payloadeditprice * action.payloadeditpieces,
+              }
             : item,
         ),
       };
@@ -138,19 +155,23 @@ export default (state = initialState, action) => {
       return {
         ...state,
         editpricepid: action.payload,
+        price: action.payloadprice,
+        pieces: action.payloadpieces,
       };
     case QTY_INCRIMENT:
       return {
         ...state,
         qrdata: state.qrdata.map(item => {
+          const Total =
+            (parseFloat(item.pieces) + parseFloat(item.pc)) *
+            parseFloat(item.price);
+
           return action.payload === item.key
             ? {
                 ...item,
                 qty: parseInt(item.qty) + 1,
                 pieces: parseInt(item.pieces) + parseInt(item.pc),
-                total:
-                  (parseInt(item.pieces) + parseInt(item.pc)) *
-                  parseFloat(item.price),
+                total: Total.toFixed(1),
               }
             : item;
         }),

@@ -5,13 +5,14 @@ import Modal from 'react-native-modal';
 import {scale, verticalScale, moderateScale} from 'react-native-size-matters';
 import CustomButton from './CustomButton';
 import {
+  editPiecesAction,
   toggleQtyModelAction,
   UpdateQrdataAction,
 } from '../../redux/actions/QrcodeAction';
 
 const QtyModel = () => {
   const dispatch = useDispatch();
-  const {QtyModalShow} = useSelector(state => state.qrState);
+  const {QtyModalShow, editpricepid} = useSelector(state => state.qrState);
   const [qrqty, setQrqty] = useState('');
 
   return (
@@ -28,8 +29,8 @@ const QtyModel = () => {
         }}>
         <TextInput
           underlineColorAndroid="transparent"
-          selectionColor={'#c79248'}
-          placeholder="Enter qty"
+          selectionColor={'#9ECED9'}
+          placeholder="Enter Pieces"
           placeholderTextColor="#666666"
           keyboardType="numeric"
           style={{
@@ -45,7 +46,7 @@ const QtyModel = () => {
           style={{
             marginTop: verticalScale(0),
             elevation: 4,
-            backgroundColor: '#c79248',
+            backgroundColor: '#9ECED9',
             paddingVertical:
               Dimensions.get('window').height < 600
                 ? verticalScale(0.7)
@@ -61,13 +62,13 @@ const QtyModel = () => {
           <View style={{marginRight: scale(20)}}>
             <CustomButton
               borderWidth={scale(1)}
-              borderColor={'#c79248'}
+              borderColor={'#9ECED9'}
               buttoncolor={'white'}
               buttonwidth={scale(120)}
               fontFamily={'Cairo-Regular'}
               buttonheight={verticalScale(35)}
               text={'CANCEL'}
-              fontcolor={'#c79248'}
+              fontcolor={'#9ECED9'}
               fontSize={scale(15)}
               onPress={() => {
                 dispatch(toggleQtyModelAction());
@@ -75,7 +76,7 @@ const QtyModel = () => {
             />
           </View>
           <CustomButton
-            buttoncolor={'#c79248'}
+            buttoncolor={'#9ECED9'}
             buttonwidth={scale(120)}
             buttonheight={verticalScale(35)}
             fontFamily={'Cairo-Regular'}
@@ -83,8 +84,9 @@ const QtyModel = () => {
             fontcolor={'white'}
             fontSize={scale(15)}
             onPress={() => {
-              dispatch(UpdateQrdataAction(qrqty));
+              dispatch(editPiecesAction(qrqty, editpricepid));
               dispatch(toggleQtyModelAction());
+              setQrqty([]);
             }}
           />
         </View>

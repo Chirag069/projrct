@@ -42,7 +42,6 @@ const SignIn = () => {
   // }, [navigation]);
 
   const userSignIn = values => {
-    console.log(values);
     if (values.username && values.password) {
       dispatch(userLoginAction(values.username, values.password));
     } else {
@@ -99,6 +98,7 @@ const SignIn = () => {
                 underlineColor="black"
                 autoCapitalize="none"
                 style={{
+                  color: '#000000',
                   backgroundColor: 'white',
                   fontSize: scale(15),
                   borderBottomWidth: 1,
@@ -125,6 +125,7 @@ const SignIn = () => {
                 keyboardType="numeric"
                 secureTextEntry={true}
                 style={{
+                  color: '#000000',
                   backgroundColor: 'white',
                   fontSize: scale(15),
                   borderBottomWidth: 1,

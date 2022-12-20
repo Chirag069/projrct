@@ -187,7 +187,7 @@ const PDFExample = () => {
                     color: '#9ECED9',
                     fontWeight: 'normal',
                     fontSize: scale(17),
-                    fontFamily: 'Cairo-Regular',
+                    fontFamily: 'Cairo-Black',
                   }}>
                   ORDER PDF
                 </Text>

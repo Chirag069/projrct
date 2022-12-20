@@ -28,3 +28,4 @@ export const BILL_REPORT = 'BILL_REPORT';
 export const REPORT_LOADING = 'REPORT_LOADING';
 export const REPORT_ERROR = 'REPORT_ERROR';
 export const UPDATE_LOADING = 'UPDATE_LOADING';
+export const EDIT_PIECES = 'EDIT_PIECES';

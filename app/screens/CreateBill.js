@@ -42,6 +42,7 @@ import QtyModel from '../components/Custom/QtyModel';
 import PriceModel from '../components/Custom/PriceModel';
 import {validatePathConfig} from '@react-navigation/native';
 import {qrLoadingAction} from '../redux/actions/QrcodeAction';
+import Feather from 'react-native-vector-icons/Feather';
 
 const CreateBill = ({navigation}) => {
   const [qrcode, setQrcode] = useState(null);
@@ -52,8 +53,7 @@ const CreateBill = ({navigation}) => {
     state => state.qrState,
   );
   const refInput = useRef();
-  const [focus, setFocus] = useState(false);
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(true);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   const removebillitem = index => {
@@ -83,26 +83,36 @@ const CreateBill = ({navigation}) => {
   };
 
   const qrcallfunction = text => {
-    if (qrdata?.length == 0) {
-      dispatch(qrdataAction(Token, text));
-      setQrcode(null);
+    if (text === null) {
+      Toast.show({
+        text1: 'please scan qr',
+        visibilityTime: 3000,
+        autoHide: true,
+        position: 'top',
+        type: 'error',
+      });
     } else {
-      var len = qrdata.length;
-      var duplicate = 0;
-
-      for (let i = 0; i < len; i++) {
-        let item = qrdata[i];
-        if (item.key === text) {
-          duplicate = +1;
-        }
-      }
-
-      if (duplicate == 1) {
-        dispatch(qtyincrimentAction(text));
-        setQrcode(null);
-      } else {
+      if (qrdata?.length == 0) {
         dispatch(qrdataAction(Token, text));
         setQrcode(null);
+      } else {
+        var len = qrdata.length;
+        var duplicate = 0;
+
+        for (let i = 0; i < len; i++) {
+          let item = qrdata[i];
+          if (item.key === text) {
+            duplicate = +1;
+          }
+        }
+
+        if (duplicate == 1) {
+          dispatch(qtyincrimentAction(text));
+          setQrcode(null);
+        } else {
+          dispatch(qrdataAction(Token, text));
+          setQrcode(null);
+        }
       }
     }
   };
@@ -110,8 +120,6 @@ const CreateBill = ({navigation}) => {
   useEffect(() => {
     isEnabled ? refInput.current.focus() : null;
   }, [qrcallfunction]);
-
-  console.log(isEnabled);
 
   return (
     <>
@@ -152,11 +160,36 @@ const CreateBill = ({navigation}) => {
                 color: '#9ECED9',
                 fontWeight: 'normal',
                 fontSize: scale(20),
-                fontFamily: 'Cairo-Regular',
+                fontFamily: 'Cairo-Black',
               }}>
-              Scanner
+              SCANNER
             </Text>
-            <View style={{marginRight: scale(5), justifyContent: 'center'}}>
+
+            <View
+              style={{
+                marginRight: scale(5),
+                justifyContent: 'center',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <View style={{flexDirection: 'row'}}>
+                <Text
+                  style={{
+                    fontFamily: 'Cairo-Black',
+                    fontSize: scale(17),
+                    color: '#9ECED9',
+                  }}>
+                  FOCUS{' '}
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: 'Cairo-Black',
+                    fontSize: scale(17),
+                    color: isEnabled ? 'green' : '#E47946',
+                  }}>
+                  {isEnabled ? 'ON' : 'OFF '}
+                </Text>
+              </View>
               <Switch
                 trackColor={{false: '#767577', true: '#9ECED9'}}
                 thumbColor={isEnabled ? '#f4f3f4' : '#f4f3f4'}
@@ -177,12 +210,12 @@ const CreateBill = ({navigation}) => {
               activeUnderlineColor={'#9ECED9'}
               underlineColor="black"
               keyboardType="numeric"
-              autoFocus={true}
               onBlur={() => {
                 isEnabled ? refInput.current.focus() : null;
               }}
               ref={refInput}
               style={{
+                color: '#000000',
                 backgroundColor: '#F5F5F5',
                 fontSize: scale(15),
                 borderBottomWidth: 1,
@@ -277,6 +310,7 @@ const CreateBill = ({navigation}) => {
                 return (
                   <View
                     style={{
+                      flex: 1,
                       shadowColor: '#000',
                       shadowOffset: {
                         width: 0,
@@ -286,10 +320,11 @@ const CreateBill = ({navigation}) => {
                       shadowRadius: 4,
                       elevation: 7,
                       backgroundColor: '#FFFFFF',
-                      paddingHorizontal: scale(10),
+                      // paddingHorizontal: scale(10),
                       marginVertical: verticalScale(5),
                       marginHorizontal: scale(10),
                       borderRadius: 5,
+                      flexDirection: 'row',
                     }}>
                     <Pressable
                       style={{
@@ -300,78 +335,129 @@ const CreateBill = ({navigation}) => {
                       onPress={() => {
                         removebillitem(index);
                       }}>
-                      <AntDesign name="close" size={scale(20)} />
+                      <AntDesign name="close" size={scale(20)} color={'grey'} />
                     </Pressable>
+
+                    <Image
+                      style={{
+                        height: scale(115),
+                        width: scale(115),
+                        borderTopLeftRadius: scale(5),
+                        borderBottomLeftRadius: scale(5),
+                      }}
+                      source={{
+                        uri: 'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/ad5c7e77765075.5c913c90093ec.jpg',
+                      }}
+                    />
+
                     <View
                       style={{
-                        marginHorizontal: scale(10),
-                        alignItems: 'center',
+                        flex: 1,
+                        marginHorizontal: scale(5),
                       }}>
-                      <Text
+                      <Pressable
                         style={{
-                          fontSize: verticalScale(16),
-                          color: '#E47946',
-                          fontFamily: 'Cairo-Black',
-                        }}>
-                        {item?.pname}
-                      </Text>
-                    </View>
+                          position: 'absolute',
+                          left: scale(5),
+                          top: verticalScale(5),
+                        }}
+                        onPress={() => {
+                          navigation.navigate('ProductEdit', {
+                            price: item.price,
+                            pieces: item.pieces,
+                            qty: item?.qty,
+                            editid: item?.productid,
+                          });
 
-                    <View
-                      style={{
-                        marginTop: 10,
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: verticalScale(13),
-                          color: 'black',
-                          fontFamily: 'Cairo-Regular',
-                          marginBottom: verticalScale(5),
+                          // dispatch(togglepriceModelAction());
+                          // dispatch(
+                          //   editpricepidAction(
+                          //     item.productid,
+                          //     item.price,
+                          //     item.pieces,
+                          //   ),
+                          // );
                         }}>
-                        Price :- {item?.price}
-                      </Text>
-                      <Text
-                        style={{
-                          fontSize: verticalScale(13),
-                          color: 'black',
-                          fontFamily: 'Cairo-Regular',
-                          marginBottom: verticalScale(5),
-                        }}>
-                        Pc :- {item?.pieces}
-                      </Text>
+                        <Feather
+                          name="settings"
+                          size={scale(20)}
+                          color={'grey'}
+                        />
+                      </Pressable>
 
-                      <Text
-                        style={{
-                          fontSize: verticalScale(13),
-                          color: 'black',
-                          fontFamily: 'Cairo-Regular',
-                          marginBottom: verticalScale(5),
-                        }}>
-                        Qty :- {item?.qty}
-                      </Text>
+                      <View style={{alignItems: 'center'}}>
+                        <Text
+                          style={{
+                            marginBottom: verticalScale(5),
+                            fontSize: verticalScale(16),
+                            color: '#E47946',
+                            fontFamily: 'Cairo-Black',
+                          }}>
+                          {item?.pname}
+                        </Text>
+                      </View>
 
-                      <Text
+                      <View
                         style={{
-                          fontSize: verticalScale(13),
-                          color: 'black',
-                          fontFamily: 'Cairo-Regular',
-                          marginBottom: verticalScale(5),
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
                         }}>
-                        Total :- {item?.total}
-                      </Text>
-                    </View>
-                    <View>
-                      <Text
-                        style={{
-                          fontSize: verticalScale(13),
-                          color: 'black',
-                          fontFamily: 'Cairo-Regular',
-                          marginBottom: verticalScale(5),
-                        }}>
-                        Colour :-{item?.color}
-                      </Text>
+                        <View>
+                          <Text
+                            style={{
+                              fontSize: verticalScale(13),
+                              color: 'black',
+                              fontFamily: 'Cairo-Regular',
+                              marginBottom: verticalScale(2),
+                            }}>
+                            Qty :- {item?.qty}
+                          </Text>
+
+                          <Text
+                            style={{
+                              fontSize: verticalScale(13),
+                              color: 'black',
+                              fontFamily: 'Cairo-Regular',
+                              marginBottom: verticalScale(2),
+                            }}>
+                            Price :- {item?.price}
+                          </Text>
+                        </View>
+
+                        <View>
+                          <Text
+                            style={{
+                              fontSize: verticalScale(13),
+                              color: 'black',
+                              fontFamily: 'Cairo-Regular',
+                              marginBottom: verticalScale(2),
+                            }}>
+                            Pc :- {item?.pieces}
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: verticalScale(13),
+                              color: 'black',
+                              fontFamily: 'Cairo-Regular',
+                              marginBottom: verticalScale(2),
+                            }}>
+                            Total :- {item?.total}
+                          </Text>
+                        </View>
+                      </View>
+
+                      <View>
+                        <Text
+                          style={{
+                            fontSize: verticalScale(13),
+                            color: 'black',
+                            fontFamily: 'Cairo-Regular',
+
+                            marginBottom: verticalScale(5),
+                          }}>
+                          Colour :-{item?.color}
+                        </Text>
+                      </View>
                     </View>
                   </View>
                 );

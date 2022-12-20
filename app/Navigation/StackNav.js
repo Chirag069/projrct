@@ -5,6 +5,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Drawer from '../Navigation/Drawer';
 import Index from './Index';
 import PDFExample from '../screens/pdf';
+import PriceModel from '../components/Custom/PriceModel';
+import ProductEdit from '../screens/ProductEdit';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +18,7 @@ const StackNav = () => {
       }}>
       <Stack.Screen name="Drawer" component={Drawer} />
       <Stack.Screen name="PDF" component={PDFExample} />
+      <Stack.Screen name="ProductEdit" component={ProductEdit} />
     </Stack.Navigator>
   );
 };
