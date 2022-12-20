@@ -21,6 +21,7 @@ import {scale, verticalScale, moderateScale} from 'react-native-size-matters';
 import CustomButton from '../components/Custom/CustomButton';
 import {useDispatch, useSelector} from 'react-redux';
 import {
+  afterEditAction,
   billArrayAction,
   editPriceAction,
   editpricepidAction,
@@ -59,6 +60,8 @@ const CreateBill = ({navigation}) => {
   const removebillitem = index => {
     dispatch(qrdatadeleteAction(index));
   };
+
+  console.log(qrdata);
 
   const selectcustomer = () => {
     if (qrdata.length > 0) {
@@ -104,9 +107,15 @@ const CreateBill = ({navigation}) => {
           if (item.key === text) {
             duplicate = +1;
           }
+          if (item.update == true) {
+            duplicate = +2;
+          }
         }
 
-        if (duplicate == 1) {
+        if (duplicate == 2) {
+          dispatch(afterEditAction(text));
+          setQrcode(null);
+        } else if (duplicate == 1) {
           dispatch(qtyincrimentAction(text));
           setQrcode(null);
         } else {

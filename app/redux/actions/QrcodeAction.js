@@ -21,6 +21,8 @@ import {
   REPORT_LOADING,
   UPDATE_LOADING,
   EDIT_PIECES,
+  EDIT_Toggle,
+  AFTER_EDIT,
 } from './types';
 import Toast from 'react-native-toast-message';
 import qrcodeReducer from '../reducers/qrcodeReducer';
@@ -61,6 +63,18 @@ export const qtyincrimentAction =
     });
     dispatch({
       type: QTY_INCRIMENT,
+      payload: incrimentid,
+    });
+  };
+
+export const afterEditAction =
+  (incrimentid = '') =>
+  dispatch => {
+    // dispatch({
+    //   type: UPDATE_LOADING,
+    // });
+    dispatch({
+      type: AFTER_EDIT,
       payload: incrimentid,
     });
   };
@@ -120,6 +134,7 @@ export const qrdataAction =
               pname: data.pname,
               total: (data.price * data.pieces).toFixed(1),
               pc: data.pieces,
+              update: false,
             };
 
             dispatch({
@@ -226,6 +241,16 @@ export const editPriceAction =
       payloadeditproductid: productid,
       payloadeditpieces: editpieces,
       payloadeditqty: editqty,
+    });
+  };
+
+export const editToggleAction =
+  (productid = '', updatepc = '') =>
+  dispatch => {
+    dispatch({
+      type: EDIT_Toggle,
+      payload: productid,
+      payloadupdatepc: updatepc,
     });
   };
 

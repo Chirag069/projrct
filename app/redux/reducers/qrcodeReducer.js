@@ -19,6 +19,8 @@ import {
   REPORT_LOADING,
   REPORT_ERROR,
   EDIT_PIECES,
+  EDIT_Toggle,
+  AFTER_EDIT,
 } from '../actions/types';
 
 const initialState = {
@@ -151,6 +153,15 @@ export default (state = initialState, action) => {
             : item,
         ),
       };
+    case EDIT_Toggle:
+      return {
+        ...state,
+        qrdata: state.qrdata.map(item =>
+          item.productid === action.payload
+            ? {...item, update: true, updatepc: action.payloadupdatepc}
+            : item,
+        ),
+      };
     case EDIT_PRICEPID:
       return {
         ...state,
@@ -171,6 +182,24 @@ export default (state = initialState, action) => {
                 ...item,
                 qty: parseInt(item.qty) + 1,
                 pieces: parseInt(item.pieces) + parseInt(item.pc),
+                total: Total.toFixed(1),
+              }
+            : item;
+        }),
+      };
+    case AFTER_EDIT:
+      return {
+        ...state,
+        qrdata: state.qrdata.map(item => {
+          const Total =
+            (parseInt(item.pieces) + parseInt(item.pieces)) *
+            parseFloat(item.price);
+
+          return action.payload === item.key
+            ? {
+                ...item,
+                qty: parseInt(item.qty) + 1,
+                pieces: parseInt(item.pieces) + parseInt(item.updatepc),
                 total: Total.toFixed(1),
               }
             : item;

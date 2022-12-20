@@ -12,7 +12,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import CustomButton from '../components/Custom/CustomButton';
 import {useDispatch} from 'react-redux';
-import {editPriceAction} from '../redux/actions/QrcodeAction';
+import {editPriceAction, editToggleAction} from '../redux/actions/QrcodeAction';
 import {color} from 'react-native-reanimated';
 
 const ProductEdit = () => {
@@ -22,9 +22,9 @@ const ProductEdit = () => {
   const [qrprice, setQrprice] = useState(String(route.params?.price));
   const [qrpieces, setQrpieces] = useState(String(route.params?.pieces));
   const [qrqty, setQty] = useState(String(route.params?.qty));
-  const [updatepc, setUpdatepc] = useState('');
+  const [updatepc, setUpdatepc] = useState(String(route.params?.pieces));
 
-  console.log(qrpieces, updatepc);
+  console.log(updatepc);
 
   const qtyonchange = text => {
     setQty(text);
@@ -240,6 +240,7 @@ const ProductEdit = () => {
                     qrqty,
                   ),
                 );
+                dispatch(editToggleAction(route.params?.editid, updatepc));
                 navigation.navigate('Drawer');
               } else {
                 alert('All feild required');
