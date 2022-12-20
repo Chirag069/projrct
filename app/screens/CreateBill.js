@@ -61,8 +61,6 @@ const CreateBill = ({navigation}) => {
     dispatch(qrdatadeleteAction(index));
   };
 
-  console.log(qrdata);
-
   const selectcustomer = () => {
     if (qrdata.length > 0) {
       dispatch(toggleCreateBillModelAction());

@@ -24,8 +24,6 @@ const ProductEdit = () => {
   const [qrqty, setQty] = useState(String(route.params?.qty));
   const [updatepc, setUpdatepc] = useState(String(route.params?.pieces));
 
-  console.log(updatepc);
-
   const qtyonchange = text => {
     setQty(text);
     if (text.length > 0) {
@@ -121,7 +119,7 @@ const ProductEdit = () => {
           <TextInput
             underlineColorAndroid="transparent"
             selectionColor={'#9ECED9'}
-            placeholder="Price"
+            placeholder="Pieces"
             placeholderTextColor="#666666"
             keyboardType="numeric"
             style={{
