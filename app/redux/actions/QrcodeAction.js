@@ -135,6 +135,7 @@ export const qrdataAction =
               total: (data.price * data.pieces).toFixed(1),
               pc: data.pieces,
               update: false,
+              image: data.image,
             };
 
             dispatch({

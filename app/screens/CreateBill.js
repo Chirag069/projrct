@@ -15,6 +15,7 @@ import {
   Keyboard,
   refreshControl,
   Switch,
+  ImageBackground,
 } from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import {scale, verticalScale, moderateScale} from 'react-native-size-matters';
@@ -313,6 +314,9 @@ const CreateBill = ({navigation}) => {
               renderItem={post => {
                 const item = post?.item;
                 const index = item?.productid;
+                const indexx = post.index + 1;
+
+                console.log(indexx);
 
                 return (
                   <View
@@ -345,17 +349,43 @@ const CreateBill = ({navigation}) => {
                       <AntDesign name="close" size={scale(20)} color={'grey'} />
                     </Pressable>
 
-                    <Image
-                      style={{
-                        height: scale(115),
-                        width: scale(115),
-                        borderTopLeftRadius: scale(5),
-                        borderBottomLeftRadius: scale(5),
-                      }}
-                      source={{
-                        uri: 'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/ad5c7e77765075.5c913c90093ec.jpg',
-                      }}
-                    />
+                    <View>
+                      <ImageBackground
+                        style={{
+                          height: scale(140),
+                          width: scale(130),
+                          resizeMode: 'cover',
+                          borderTopLeftRadius: scale(5),
+                          borderBottomLeftRadius: scale(5),
+                        }}
+                        source={{
+                          uri: item.image
+                            ? item.image
+                            : 'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/ad5c7e77765075.5c913c90093ec.jpg',
+                        }}>
+                        <View
+                          style={{
+                            backgroundColor: '#9ECED9',
+                            width: scale(25),
+                            height: scale(23),
+                            borderBottomRightRadius: verticalScale(17),
+                            justifyContent: 'center',
+                            // alignItems: 'center',
+                          }}>
+                          <Text
+                            style={{
+                              position: 'absolute',
+                              color: '#000000',
+                              top: 0,
+                              left: 0,
+                              fontSize: scale(13),
+                              marginLeft: scale(5),
+                            }}>
+                            {indexx}
+                          </Text>
+                        </View>
+                      </ImageBackground>
+                    </View>
 
                     <View
                       style={{
@@ -375,15 +405,6 @@ const CreateBill = ({navigation}) => {
                             qty: item?.qty,
                             editid: item?.productid,
                           });
-
-                          // dispatch(togglepriceModelAction());
-                          // dispatch(
-                          //   editpricepidAction(
-                          //     item.productid,
-                          //     item.price,
-                          //     item.pieces,
-                          //   ),
-                          // );
                         }}>
                         <Feather
                           name="settings"
@@ -395,10 +416,14 @@ const CreateBill = ({navigation}) => {
                       <View style={{alignItems: 'center'}}>
                         <Text
                           style={{
+                            width: scale(120),
+                            marginTop: verticalScale(5),
+                            lineHeight: verticalScale(20),
                             marginBottom: verticalScale(5),
-                            fontSize: verticalScale(16),
+                            textAlign: 'center',
+                            fontSize: verticalScale(15),
                             color: '#E47946',
-                            fontFamily: 'Cairo-Black',
+                            fontFamily: 'Cairo-Regular',
                           }}>
                           {item?.pname}
                         </Text>
