@@ -14,6 +14,7 @@ const initialState = {
   loggedLoading: false,
   userdata: null,
   Token: null,
+  userdata: [],
 };
 
 export default (state = initialState, action) => {
@@ -22,6 +23,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         Token: action.payload,
+        userdata: action.payloaduserdata,
         loggedLoading: false,
         authLoading: false,
       };

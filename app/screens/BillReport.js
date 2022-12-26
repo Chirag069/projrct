@@ -130,6 +130,7 @@ const BillReport = () => {
           <View style={{flex: 1}}>
             <Text
               style={{
+                color: 'grey',
                 alignSelf: 'center',
                 fontFamily: 'Cairo-Regular',
                 fontSize: scale(12),
@@ -198,11 +199,12 @@ const BillReport = () => {
             )}
           </View>
           <View style={{justifyContent: 'center', marginHorizontal: scale(10)}}>
-            <FontAwesome5 name="exchange-alt" size={scale(20)} />
+            <FontAwesome5 name="exchange-alt" size={scale(20)} color={'grey'} />
           </View>
           <View style={{flex: 1}}>
             <Text
               style={{
+                color: 'grey',
                 alignSelf: 'center',
                 fontFamily: 'Cairo-Regular',
                 fontSize: scale(12),
@@ -383,16 +385,19 @@ const BillReport = () => {
                       />
                     </TouchableOpacity>
 
-                    <View>
+                    <View style={{}}>
                       <View
                         style={{
                           marginHorizontal: scale(10),
-                          alignItems: 'center',
+                          width: scale(250),
                         }}>
                         <Text
                           style={{
+                            alignSelf: 'center',
+                            textAlign: 'center',
                             fontSize: verticalScale(15),
                             color: '#E47946',
+                            lineHeight: verticalScale(20),
                             fontFamily: 'Cairo-Black',
                           }}>
                           {item?.customer}
@@ -401,49 +406,58 @@ const BillReport = () => {
 
                       <View
                         style={{
-                          marginTop: 10,
                           flexDirection: 'row',
                           justifyContent: 'space-between',
                         }}>
-                        <Text
+                        <View
                           style={{
-                            fontSize: verticalScale(13),
-                            color: 'black',
-                            fontFamily: 'Cairo-Regular',
-                            marginBottom: verticalScale(5),
+                            marginTop: verticalScale(10),
+                            justifyContent: 'space-between',
                           }}>
-                          Bill No. :-{item.bill_no}
-                        </Text>
+                          <Text
+                            style={{
+                              fontSize: verticalScale(13),
+                              color: 'black',
+                              fontFamily: 'Cairo-Regular',
+                              marginBottom: verticalScale(2),
+                            }}>
+                            Bill No. :-{item.bill_no}
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: verticalScale(13),
+                              color: 'black',
+                              fontFamily: 'Cairo-Regular',
+                              marginBottom: verticalScale(5),
+                            }}>
+                            Qty :-{item.qty}
+                          </Text>
+                        </View>
 
-                        <Text
+                        <View
                           style={{
-                            fontSize: verticalScale(13),
-                            color: 'black',
-                            fontFamily: 'Cairo-Regular',
-                            marginBottom: verticalScale(5),
+                            marginTop: verticalScale(10),
+                            justifyContent: 'space-between',
                           }}>
-                          Invoice id :-{item.invoice_id}
-                        </Text>
-
-                        <Text
-                          style={{
-                            fontSize: verticalScale(13),
-                            color: 'black',
-                            fontFamily: 'Cairo-Regular',
-                            marginBottom: verticalScale(5),
-                          }}>
-                          Qty :-{item.qty}
-                        </Text>
-
-                        <Text
-                          style={{
-                            fontSize: verticalScale(13),
-                            color: 'black',
-                            fontFamily: 'Cairo-Regular',
-                            marginBottom: verticalScale(5),
-                          }}>
-                          Total :-{item.total}
-                        </Text>
+                          <Text
+                            style={{
+                              fontSize: verticalScale(13),
+                              color: 'black',
+                              fontFamily: 'Cairo-Regular',
+                              marginBottom: verticalScale(2),
+                            }}>
+                            Invoice id :-{item.invoice_id}
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: verticalScale(13),
+                              color: 'black',
+                              fontFamily: 'Cairo-Regular',
+                              marginBottom: verticalScale(5),
+                            }}>
+                            Total :-{item.total}
+                          </Text>
+                        </View>
                       </View>
                     </View>
                   </View>

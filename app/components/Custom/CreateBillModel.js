@@ -41,6 +41,7 @@ const CreateBillModel = ({}) => {
     billpieces,
     billprice,
     billtotal,
+    getqrdata,
   } = useSelector(state => state.qrState);
   const {Token} = useSelector(state => state.authState);
   const {customerlist} = useSelector(state => state.qrState);
@@ -153,6 +154,7 @@ const CreateBillModel = ({}) => {
           <Dropdown
             style={[styles.dropdown, isFocus && {borderColor: '#9ECED9'}]}
             placeholderStyle={styles.placeholderStyle}
+            itemTextStyle={{color: 'grey'}}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
             iconStyle={styles.iconStyle}
@@ -225,7 +227,7 @@ const CreateBillModel = ({}) => {
             fontSize={scale(15)}
             onPress={() => {
               if (text && value) {
-                qrdata.map(item =>
+                getqrdata.map(item =>
                   dispatch(
                     SubmiBillAction(
                       Token,
@@ -240,17 +242,9 @@ const CreateBillModel = ({}) => {
                     ),
                   ),
                 );
-                dispatch(qrdataclearAction());
                 dispatch(toggleCreateBillModelAction());
               } else {
                 Alert.alert('Please Select Customer');
-                // Toast.show({
-                //   text1: 'Please select customer',
-                //   visibilityTime: 2000,
-                //   autoHide: true,
-                //   position: 'top',
-                //   type: 'success',
-                // });
               }
             }}
           />
@@ -289,9 +283,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   placeholderStyle: {
+    color: 'grey',
     fontSize: 16,
   },
   selectedTextStyle: {
+    color: '#000000',
     fontSize: 16,
   },
   iconStyle: {

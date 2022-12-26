@@ -6,12 +6,10 @@ const NoNetwork = () => {
   return (
     <Modal>
       <View style={noNetworkStyles.noNetWorkContainer}>
-        <View style={noNetworkStyles.noNetworkImageContainer}>
-          <Image
-            style={noNetworkStyles.noNetworkImageStyle}
-            source={require('../../assets/Images/sad.png')}
-          />
-        </View>
+        <Image
+          style={noNetworkStyles.noNetworkImageStyle}
+          source={require('../../assets/Images/nointernet.jpg')}
+        />
         <View style={noNetworkStyles.noNetworkTextContianer}>
           <Text style={noNetworkStyles.nonetworkTextStyle}>
             No Internet Connection
@@ -57,8 +55,8 @@ const noNetworkStyles = StyleSheet.create({
   },
   noNetworkImageStyle: {
     zIndex: 1,
-    width: scale(40),
-    height: scale(40),
+    width: scale(300),
+    height: scale(300),
   },
   noNetworkTextContianer: {
     marginTop: verticalScale(30),

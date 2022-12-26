@@ -28,6 +28,14 @@ export const BILL_REPORT = 'BILL_REPORT';
 export const REPORT_LOADING = 'REPORT_LOADING';
 export const REPORT_ERROR = 'REPORT_ERROR';
 export const UPDATE_LOADING = 'UPDATE_LOADING';
-export const EDIT_PIECES = 'EDIT_PIECES';
+export const UPDATE_ERROR = 'UPDATE_ERROR';
+
 export const EDIT_Toggle = 'EDIT_Toggle';
-export const AFTER_EDIT = 'AFTER_EDIT';
+
+export const GET_QRDATA = 'GET_QRDATA';
+export const DELETE_QRDATA = 'DELETE_QRDATA';
+export const DELETE_LOADING = 'DELETE_LOADING';
+export const DELETE_ERROR = 'DELETE_ERROR';
+export const RESTART_BILL = 'RESTART_BILL';
+export const RESTART_LOADING = 'RESTART_LOADING';
+export const RESTART_ERROR = 'RESTART_ERROR';

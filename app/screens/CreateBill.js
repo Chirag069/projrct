@@ -16,6 +16,7 @@ import {
   refreshControl,
   Switch,
   ImageBackground,
+  Alert,
 } from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import {scale, verticalScale, moderateScale} from 'react-native-size-matters';
@@ -24,13 +25,18 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   afterEditAction,
   billArrayAction,
+  CustomerListAction,
+  deleteqrdataAction,
   editPriceAction,
   editpricepidAction,
+  getqrdataAction,
+  qrAction,
   qrdataAction,
   qrdataclearAction,
   qrdatadeleteAction,
   qrListAction,
   qtyincrimentAction,
+  restartBillAction,
   toggleCreateBillModelAction,
   togglepriceModelAction,
   toggleQtyModelAction,
@@ -42,29 +48,35 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Toast from 'react-native-toast-message';
 import QtyModel from '../components/Custom/QtyModel';
 import PriceModel from '../components/Custom/PriceModel';
-import {validatePathConfig} from '@react-navigation/native';
-import {qrLoadingAction} from '../redux/actions/QrcodeAction';
 import Feather from 'react-native-vector-icons/Feather';
+import {useFocusEffect} from '@react-navigation/native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CreateBill = ({navigation}) => {
   const [qrcode, setQrcode] = useState(null);
-  const [isRefreshing, setIsRefreshing] = useState(false);
+
   const dispatch = useDispatch();
-  const {Token} = useSelector(state => state.authState);
-  const {qrdata, qrLoading, billsubmitloading, updateloading} = useSelector(
-    state => state.qrState,
-  );
+  const {Token, userdata} = useSelector(state => state.authState);
+  const {
+    qrdata,
+    qrLoading,
+    billsubmitloading,
+    updateloading,
+    getqrdata,
+    deleteloading,
+    restartloading,
+  } = useSelector(state => state.qrState);
   const refInput = useRef();
   const [isEnabled, setIsEnabled] = useState(true);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
-  const removebillitem = index => {
-    dispatch(qrdatadeleteAction(index));
-  };
+  console.log(restartloading);
 
   const selectcustomer = () => {
-    if (qrdata.length > 0) {
+    if (getqrdata.length > 0) {
       dispatch(toggleCreateBillModelAction());
+      dispatch(CustomerListAction(Token));
     } else {
       Toast.show({
         text1: 'Please Scan QR',
@@ -76,62 +88,27 @@ const CreateBill = ({navigation}) => {
     }
   };
 
-  const onchange = text => {
+  const onchange = async text => {
     setQrcode(text);
-
     if (text?.length >= 6) {
-      qrcallfunction(text);
-    }
-  };
-
-  const qrcallfunction = text => {
-    if (text === null) {
-      Toast.show({
-        text1: 'please scan qr',
-        visibilityTime: 3000,
-        autoHide: true,
-        position: 'top',
-        type: 'error',
-      });
-    } else {
-      if (qrdata?.length == 0) {
-        dispatch(qrdataAction(Token, text));
-        setQrcode(null);
-      } else {
-        var len = qrdata.length;
-        var duplicate = 0;
-
-        for (let i = 0; i < len; i++) {
-          let item = qrdata[i];
-          if (item.key === text) {
-            duplicate = +1;
-          }
-          if (item.update == true) {
-            duplicate = +2;
-          }
-        }
-
-        if (duplicate == 2) {
-          dispatch(afterEditAction(text));
-          setQrcode(null);
-        } else if (duplicate == 1) {
-          dispatch(qtyincrimentAction(text));
-          setQrcode(null);
-        } else {
-          dispatch(qrdataAction(Token, text));
-          setQrcode(null);
-        }
-      }
+      dispatch(qrdataAction(Token, text));
+      setQrcode([]);
     }
   };
 
   useEffect(() => {
-    isEnabled ? refInput.current.focus() : null;
-  }, [qrcallfunction]);
+    isEnabled ? refInput.current?.focus() : false;
+  }, [onchange]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      dispatch(getqrdataAction(Token));
+    }, []),
+  );
 
   return (
     <>
-      {billsubmitloading ? (
+      {billsubmitloading || restartloading ? (
         <View
           style={{
             marginTop: 'auto',
@@ -141,7 +118,7 @@ const CreateBill = ({navigation}) => {
           }}>
           <StatusBar backgroundColor={'#9ECED9'} barStyle="dark-content" />
           <ActivityIndicator
-            animating={billsubmitloading}
+            animating={billsubmitloading || restartloading}
             color={'#9ECED9'}
             size={scale(30)}
           />
@@ -172,6 +149,28 @@ const CreateBill = ({navigation}) => {
               }}>
               SCANNER
             </Text>
+
+            <TouchableOpacity
+              onPress={async () => {
+                const userid = await AsyncStorage.getItem('@user_id');
+                Alert.alert(
+                  'Restart',
+                  'Are you sure you want to restart bill',
+                  [
+                    {
+                      text: 'OK',
+                      onPress: () => dispatch(restartBillAction(Token, userid)),
+                    },
+                    {text: 'Cancel'},
+                  ],
+                );
+              }}>
+              <FontAwesome
+                name="power-off"
+                size={scale(27)}
+                color={'#9ECED9'}
+              />
+            </TouchableOpacity>
 
             <View
               style={{
@@ -246,10 +245,11 @@ const CreateBill = ({navigation}) => {
                 fontFamily={'Cairo-Regular'}
                 fontcolor={'#333'}
                 fontSize={scale(17)}
-                onPress={() => qrcallfunction(qrcode)}
+                onPress={() => dispatch(getqrdataAction(Token))}
               />
             </View>
-            {qrLoading || updateloading ? (
+
+            {qrLoading || updateloading || deleteloading ? (
               <View
                 style={{
                   backgroundColor: '#f5f5f5',
@@ -261,7 +261,7 @@ const CreateBill = ({navigation}) => {
                   barStyle="dark-content"
                 />
                 <ActivityIndicator
-                  animating={qrLoading || updateloading}
+                  animating={qrLoading || updateloading || deleteloading}
                   color={'#9ECED9'}
                   size={scale(30)}
                 />
@@ -270,7 +270,7 @@ const CreateBill = ({navigation}) => {
               <View />
             )}
           </View>
-          {qrdata.length === 0 ? (
+          {getqrdata?.length === 0 ? (
             <View
               style={{
                 backgroundColor: '#f5f5f5',
@@ -302,7 +302,7 @@ const CreateBill = ({navigation}) => {
                 paddingBottom: verticalScale(10),
                 paddingTop: verticalScale(10),
               }}
-              data={qrdata}
+              data={getqrdata}
               horizontal={false}
               numColumns={1}
               keyExtractor={item => {
@@ -313,10 +313,6 @@ const CreateBill = ({navigation}) => {
               }}
               renderItem={post => {
                 const item = post?.item;
-                const index = item?.productid;
-                const indexx = post.index + 1;
-
-                console.log(indexx);
 
                 return (
                   <View
@@ -344,7 +340,18 @@ const CreateBill = ({navigation}) => {
                         top: verticalScale(5),
                       }}
                       onPress={() => {
-                        removebillitem(index);
+                        Alert.alert(
+                          'Delete',
+                          'Are you sure you want to delete item',
+                          [
+                            {
+                              text: 'OK',
+                              onPress: () =>
+                                dispatch(deleteqrdataAction(Token, item.id)),
+                            },
+                            {text: 'Cancel'},
+                          ],
+                        );
                       }}>
                       <AntDesign name="close" size={scale(20)} color={'grey'} />
                     </Pressable>
@@ -359,8 +366,8 @@ const CreateBill = ({navigation}) => {
                           borderBottomLeftRadius: scale(5),
                         }}
                         source={{
-                          uri: item.image
-                            ? item.image
+                          uri: item?.image
+                            ? item?.image
                             : 'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/ad5c7e77765075.5c913c90093ec.jpg',
                         }}>
                         <View
@@ -381,7 +388,7 @@ const CreateBill = ({navigation}) => {
                               fontSize: scale(13),
                               marginLeft: scale(5),
                             }}>
-                            {indexx}
+                            {item.seq_no}
                           </Text>
                         </View>
                       </ImageBackground>
@@ -403,7 +410,7 @@ const CreateBill = ({navigation}) => {
                             price: item.price,
                             pieces: item.pieces,
                             qty: item?.qty,
-                            editid: item?.productid,
+                            editid: item?.id,
                           });
                         }}>
                         <Feather

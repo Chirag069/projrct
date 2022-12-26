@@ -12,8 +12,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import CustomButton from '../components/Custom/CustomButton';
 import {useDispatch} from 'react-redux';
-import {editPriceAction, editToggleAction} from '../redux/actions/QrcodeAction';
-import {color} from 'react-native-reanimated';
+import {
+  editPriceAction,
+  editToggleAction,
+  updataqrdataAction,
+} from '../redux/actions/QrcodeAction';
+import {useSelector} from 'react-redux';
 
 const ProductEdit = () => {
   const navigation = useNavigation();
@@ -23,6 +27,7 @@ const ProductEdit = () => {
   const [qrpieces, setQrpieces] = useState(String(route.params?.pieces));
   const [qrqty, setQty] = useState(String(route.params?.qty));
   const [updatepc, setUpdatepc] = useState(String(route.params?.pieces));
+  const {Token} = useSelector(state => state.authState);
 
   const qtyonchange = text => {
     setQty(text);
@@ -231,14 +236,19 @@ const ProductEdit = () => {
             onPress={() => {
               if (qrprice && qrpieces && qrqty) {
                 dispatch(
-                  editPriceAction(
-                    qrprice,
+                  updataqrdataAction(
+                    Token,
                     route.params?.editid,
-                    qrpieces,
                     qrqty,
+                    qrprice,
+                    qrpieces,
+                    qrpieces * qrprice,
                   ),
                 );
-                dispatch(editToggleAction(route.params?.editid, updatepc));
+                setQrprice([]);
+                setQrpieces([]);
+                setQty([]);
+                setUpdatepc([]);
                 navigation.navigate('Drawer');
               } else {
                 alert('All feild required');

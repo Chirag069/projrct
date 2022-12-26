@@ -88,17 +88,23 @@ export const userLoginAction =
             if (serverResponse && serverResponse.token) {
               (async () => {
                 await AsyncStorage.setItem('@user_token', serverResponse.token);
+                await AsyncStorage.setItem(
+                  '@user_id',
+                  serverResponse.data.user_id,
+                );
               })();
             }
 
             (async () => {
               const userToken = await AsyncStorage.getItem('@user_token');
+
               dispatch(LoggedAction(userToken));
             })();
 
             dispatch({
               type: USER_LOGIN,
               payload: serverResponse.token,
+              payloaduserdata: serverResponse.data,
             });
 
             Toast.show({

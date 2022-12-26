@@ -21,6 +21,16 @@ import {
   EDIT_PIECES,
   EDIT_Toggle,
   AFTER_EDIT,
+  QR,
+  QRDAATA,
+  GET_QRDATA,
+  DELETE_LOADING,
+  DELETE_ERROR,
+  UPDATE_LOADING,
+  UPDATE_ERROR,
+  BILL_SUBMIT_ERROR,
+  RESTART_LOADING,
+  RESTART_ERROR,
 } from '../actions/types';
 
 const initialState = {
@@ -46,31 +56,27 @@ const initialState = {
   billsubmitloading: false,
   billreport: [],
   billpdf: [],
+  restartloading: false,
   reportloading: false,
+  deleteloading: false,
+  updateloading: false,
   price: [],
   pieces: [],
+  firstqrdata: [],
+  getqrdata: [],
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case QRDATA:
-      const qrobj = [action.payload, ...state.qrdata];
+    case GET_QRDATA:
+      return {
+        ...state,
+        getqrdata: action.payload,
+        deleteloading: false,
+        updateloading: false,
+        restartloading: false,
+      };
 
-      return {
-        ...state,
-        qrdata: qrobj,
-        qrLoading: false,
-      };
-    case QRDATA_CLEAR:
-      return {
-        ...state,
-        qrdata: [],
-      };
-    case QRDATA_DELETE:
-      return {
-        ...state,
-        qrdata: state.qrdata.filter(item => item.productid !== action.payload),
-      };
     case QRLOADING:
       return {
         ...state,
@@ -82,11 +88,6 @@ export default (state = initialState, action) => {
         billsubmitloading: true,
       };
 
-    case QRLIST:
-      return {
-        ...state,
-        qrlist: [...new Set([action.payload, ...state.qrlist])],
-      };
     case TOGGLE_CREATEBILL_MODEL:
       return {
         ...state,
@@ -98,113 +99,14 @@ export default (state = initialState, action) => {
         ...state,
         customerlist: action.payload,
       };
-    case BILLARRAY:
-      return {
-        ...state,
-        billcolor: action.payloadcolor,
-        billproductid: action.payloadproductid,
-        billqty: action.payloadqty,
-        billpieces: action.payloadpieces,
-        billprice: action.payloadprice,
-        billtotal: action.payloadtotal,
-      };
+
     case SUBMIT_BILL:
       return {
         ...state,
         createbillstatus: action.payload,
         billsubmitloading: false,
       };
-    case QTY_MODEL:
-      return {
-        ...state,
-        QtyModalShow: !state.QtyModalShow,
-      };
-    case EDIT_PIECES:
-      return {
-        ...state,
-        qrdata: state.qrdata.map(item =>
-          item.productid === action.payloadeditproductid
-            ? {
-                ...item,
-                pieces: action.payloadeditpieces,
-                total: parseFloat(item.price) * action.payloadeditpieces,
-              }
-            : item,
-        ),
-      };
 
-    case PRICE_MODEL:
-      return {
-        ...state,
-        priceModalShow: !state.priceModalShow,
-      };
-    case EDIT_PRICE:
-      return {
-        ...state,
-        qrdata: state.qrdata.map(item =>
-          item.productid === action.payloadeditproductid
-            ? {
-                ...item,
-                qty: action.payloadeditqty,
-                pieces: action.payloadeditpieces,
-                price: action.payloadeditprice,
-                total: action.payloadeditprice * action.payloadeditpieces,
-              }
-            : item,
-        ),
-      };
-    case EDIT_Toggle:
-      return {
-        ...state,
-        qrdata: state.qrdata.map(item =>
-          item.productid === action.payload
-            ? {...item, update: true, updatepc: action.payloadupdatepc}
-            : item,
-        ),
-      };
-    case EDIT_PRICEPID:
-      return {
-        ...state,
-        editpricepid: action.payload,
-        price: action.payloadprice,
-        pieces: action.payloadpieces,
-      };
-    case QTY_INCRIMENT:
-      return {
-        ...state,
-        qrdata: state.qrdata.map(item => {
-          const Total =
-            (parseFloat(item.pieces) + parseFloat(item.pc)) *
-            parseFloat(item.price);
-
-          return action.payload === item.key
-            ? {
-                ...item,
-                qty: parseInt(item.qty) + 1,
-                pieces: parseInt(item.pieces) + parseInt(item.pc),
-                total: Total.toFixed(1),
-              }
-            : item;
-        }),
-      };
-    case AFTER_EDIT:
-      return {
-        ...state,
-        qrdata: state.qrdata.map(item => {
-          const Total =
-            (parseInt(item.pieces) + parseInt(item.pieces)) *
-            parseFloat(item.price);
-
-          return action.payload === item.key
-            ? {
-                ...item,
-                qty: parseInt(item.qty) + 1,
-                pieces: parseInt(item.pieces) + parseInt(item.updatepc),
-                total: Total.toFixed(1),
-              }
-            : item;
-        }),
-      };
     case BILL_REPORT:
       return {
         ...state,
@@ -216,10 +118,45 @@ export default (state = initialState, action) => {
         ...state,
         reportloading: true,
       };
+    case UPDATE_LOADING:
+      return {
+        ...state,
+        updateloading: true,
+      };
+    case UPDATE_ERROR:
+      return {
+        ...state,
+        updateloading: false,
+      };
+    case DELETE_LOADING:
+      return {
+        ...state,
+        deleteloading: true,
+      };
+    case RESTART_LOADING:
+      return {
+        ...state,
+        restartloading: true,
+      };
+    case RESTART_ERROR:
+      return {
+        ...state,
+        restartloading: false,
+      };
     case REPORT_ERROR:
       return {
         ...state,
         reportloading: false,
+      };
+    case BILL_SUBMIT_ERROR:
+      return {
+        ...state,
+        billsubmitloading: false,
+      };
+    case DELETE_ERROR:
+      return {
+        ...state,
+        deleteloading: false,
       };
 
     default:
