@@ -71,8 +71,6 @@ const CreateBill = ({navigation}) => {
   const [isEnabled, setIsEnabled] = useState(true);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
-  console.log(restartloading);
-
   const selectcustomer = () => {
     if (getqrdata.length > 0) {
       dispatch(toggleCreateBillModelAction());

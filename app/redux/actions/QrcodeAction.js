@@ -103,6 +103,17 @@ export const qrdataAction =
 
           dispatch(qrLoadingAction());
           if (serverResponse.success) {
+            console.log(serverResponse.sound);
+            if (serverResponse.sound == 1) {
+              const track = new Sound(serverResponse.sound_link, null, e => {
+                if (e) {
+                  console.log('error loading track:', e);
+                } else {
+                  track.play();
+                }
+              });
+            }
+
             Toast.show({
               text1: serverResponse.message,
               visibilityTime: 3000,
