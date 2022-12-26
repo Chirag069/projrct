@@ -20,6 +20,7 @@ const AppNav = () => {
   useEffect(() => {
     (async () => {
       const userToken = await AsyncStorage.getItem('@user_token');
+      const userid = await AsyncStorage.getItem('@user_id');
       try {
         dispatch(LoggedAction(userToken));
       } catch (e) {

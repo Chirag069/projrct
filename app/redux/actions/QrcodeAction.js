@@ -23,12 +23,30 @@ import {
   EDIT_PIECES,
   EDIT_Toggle,
   AFTER_EDIT,
+  QR,
+  QRDAATA,
+  GET_QRDATA,
+  DELETE_QRDATA,
+  DELETE_LOADING,
+  UPDATE_ERROR,
+  RESTART_BILL,
+  RESTART_LOADING,
 } from './types';
 import Toast from 'react-native-toast-message';
 import qrcodeReducer from '../reducers/qrcodeReducer';
 import NetInfo from '@react-native-community/netinfo';
+import Sound from 'react-native-sound';
 
 export const qrLoadingAction =
+  (loading = false) =>
+  dispatch => {
+    dispatch({
+      type: QRLOADING,
+      payload: loading,
+    });
+  };
+
+export const deleteLoadingAction =
   (loading = false) =>
   dispatch => {
     dispatch({
@@ -52,45 +70,6 @@ export const qrListAction =
     dispatch({
       type: QRLIST,
       payload: qrdata,
-    });
-  };
-
-export const qtyincrimentAction =
-  (incrimentid = '') =>
-  dispatch => {
-    dispatch({
-      type: UPDATE_LOADING,
-    });
-    dispatch({
-      type: QTY_INCRIMENT,
-      payload: incrimentid,
-    });
-  };
-
-export const afterEditAction =
-  (incrimentid = '') =>
-  dispatch => {
-    // dispatch({
-    //   type: UPDATE_LOADING,
-    // });
-    dispatch({
-      type: AFTER_EDIT,
-      payload: incrimentid,
-    });
-  };
-
-export const qrdataclearAction = () => {
-  return {
-    type: QRDATA_CLEAR,
-  };
-};
-
-export const qrdatadeleteAction =
-  (productid = '') =>
-  dispatch => {
-    dispatch({
-      type: QRDATA_DELETE,
-      payload: productid,
     });
   };
 
@@ -120,31 +99,234 @@ export const qrdataAction =
         .then(result => {
           let serverResponse = result;
 
-          dispatch(qrLoadingAction());
-          if (serverResponse?.success) {
-            const data = serverResponse.data;
+          dispatch(getqrdataAction(userToken));
 
-            const qr = {
-              key: barcode,
-              price: data.price,
-              pieces: data.pieces,
-              color: data.color,
-              productid: data.product_id,
-              qty: 1,
-              pname: data.pname,
-              total: (data.price * data.pieces).toFixed(1),
-              pc: data.pieces,
-              update: false,
-              image: data.image,
-            };
+          dispatch(qrLoadingAction());
+          if (serverResponse.success) {
+            Toast.show({
+              text1: serverResponse.message,
+              visibilityTime: 3000,
+              autoHide: true,
+              position: 'top',
+              type: 'success',
+            });
 
             dispatch({
               type: QRDATA,
-              payload: qr,
-              payloadscncode: barcode,
             });
           } else {
             dispatch(qrLoadingAction());
+            alert(serverResponse.message);
+            NetInfo.fetch().then(state => {
+              if (state.isConnected) {
+                Toast.show({
+                  text1: 'something wait wrong',
+                  visibilityTime: 3000,
+                  autoHide: true,
+                  position: 'top',
+                  type: 'error',
+                });
+              } else {
+                Toast.show({
+                  text1: 'Check your Internet Connection',
+                  visibilityTime: 3000,
+                  autoHide: true,
+                  position: 'top',
+                  type: 'error',
+                });
+              }
+            });
+          }
+        })
+        .catch(error => {
+          dispatch(qrLoadingAction());
+          alert(error);
+          NetInfo.fetch().then(state => {
+            if (state.isConnected) {
+              Toast.show({
+                text1: 'something wait wrong',
+                visibilityTime: 3000,
+                autoHide: true,
+                position: 'top',
+                type: 'error',
+              });
+            } else {
+              Toast.show({
+                text1: 'Check your Internet Connection',
+                visibilityTime: 3000,
+                autoHide: true,
+                position: 'top',
+                type: 'error',
+              });
+            }
+          });
+        });
+    } catch (err) {
+      alert('error 2 login');
+      dispatch(qrLoadingAction());
+      NetInfo.fetch().then(state => {
+        if (state.isConnected) {
+          Toast.show({
+            text1: 'something wait wrong',
+            visibilityTime: 3000,
+            autoHide: true,
+            position: 'top',
+            type: 'error',
+          });
+        } else {
+          Toast.show({
+            text1: 'Check your Internet Connection',
+            visibilityTime: 3000,
+            autoHide: true,
+            position: 'top',
+            type: 'error',
+          });
+        }
+      });
+    }
+  };
+
+export const getqrdataAction =
+  (userToken = '') =>
+  dispatch => {
+    // dispatch(qrLoadingAction(true));
+    try {
+      var myHeaders = new Headers();
+      myHeaders.append('Authorization', `Bearer ${userToken}`);
+
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+      };
+
+      fetch(
+        'https://nts.dhyaravi.com/outward_ipa/home/get_cart',
+        requestOptions,
+      )
+        .then(response => response.json())
+        .then(result => {
+          let serverResponse = result;
+
+          // dispatch(qrLoadingAction());
+          if (serverResponse) {
+            dispatch({
+              type: GET_QRDATA,
+              payload: serverResponse.data,
+            });
+          } else {
+            // dispatch(qrLoadingAction());
+            alert(serverResponse.message);
+            NetInfo.fetch().then(state => {
+              if (state.isConnected) {
+                Toast.show({
+                  text1: 'something wait wrong',
+                  visibilityTime: 3000,
+                  autoHide: true,
+                  position: 'top',
+                  type: 'error',
+                });
+              } else {
+                Toast.show({
+                  text1: 'Check your Internet Connection',
+                  visibilityTime: 3000,
+                  autoHide: true,
+                  position: 'top',
+                  type: 'error',
+                });
+              }
+            });
+          }
+        })
+        .catch(error => {
+          dispatch(qrLoadingAction());
+          alert(error);
+          NetInfo.fetch().then(state => {
+            if (state.isConnected) {
+              Toast.show({
+                text1: 'something wait wrong',
+                visibilityTime: 3000,
+                autoHide: true,
+                position: 'top',
+                type: 'error',
+              });
+            } else {
+              Toast.show({
+                text1: 'Check your Internet Connection',
+                visibilityTime: 3000,
+                autoHide: true,
+                position: 'top',
+                type: 'error',
+              });
+            }
+          });
+        });
+    } catch (err) {
+      alert('error 2 login');
+      dispatch(qrLoadingAction());
+      NetInfo.fetch().then(state => {
+        if (state.isConnected) {
+          Toast.show({
+            text1: 'something wait wrong',
+            visibilityTime: 3000,
+            autoHide: true,
+            position: 'top',
+            type: 'error',
+          });
+        } else {
+          Toast.show({
+            text1: 'Check your Internet Connection',
+            visibilityTime: 3000,
+            autoHide: true,
+            position: 'top',
+            type: 'error',
+          });
+        }
+      });
+    }
+  };
+
+export const deleteqrdataAction =
+  (userToken = '', id = '') =>
+  dispatch => {
+    // dispatch(qrLoadingAction(true));
+    try {
+      dispatch({
+        type: DELETE_LOADING,
+      });
+      var myHeaders = new Headers();
+      myHeaders.append('Authorization', `Bearer ${userToken}`);
+
+      var formdata = new FormData();
+      formdata.append('id', id);
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: formdata,
+        redirect: 'follow',
+      };
+
+      fetch(
+        'https://nts.dhyaravi.com/outward_ipa/home/delete_data',
+        requestOptions,
+      )
+        .then(response => response.json())
+        .then(result => {
+          let serverResponse = result;
+          if (serverResponse) {
+            dispatch({
+              type: DELETE_QRDATA,
+            });
+            dispatch(getqrdataAction(userToken));
+            Toast.show({
+              text1: 'item successfully deleted',
+              visibilityTime: 3000,
+              autoHide: true,
+              position: 'top',
+              type: 'error',
+            });
+          } else {
             alert(serverResponse.message);
             NetInfo.fetch().then(state => {
               if (state.isConnected) {
@@ -220,61 +402,6 @@ export const toggleCreateBillModelAction = () => dispatch => {
     type: TOGGLE_CREATEBILL_MODEL,
   });
 };
-
-export const toggleQtyModelAction = () => dispatch => {
-  dispatch({
-    type: QTY_MODEL,
-  });
-};
-
-export const togglepriceModelAction = () => dispatch => {
-  dispatch({
-    type: PRICE_MODEL,
-  });
-};
-
-export const editPriceAction =
-  (editprice = '', productid = '', editpieces = '', editqty = '') =>
-  dispatch => {
-    dispatch({
-      type: EDIT_PRICE,
-      payloadeditprice: editprice,
-      payloadeditproductid: productid,
-      payloadeditpieces: editpieces,
-      payloadeditqty: editqty,
-    });
-  };
-
-export const editToggleAction =
-  (productid = '', updatepc = '') =>
-  dispatch => {
-    dispatch({
-      type: EDIT_Toggle,
-      payload: productid,
-      payloadupdatepc: updatepc,
-    });
-  };
-
-export const editpricepidAction =
-  (productid = '', price = '', pieces = '') =>
-  dispatch => {
-    dispatch({
-      type: EDIT_PRICEPID,
-      payload: productid,
-      payloadprice: price,
-      payloadpieces: pieces,
-    });
-  };
-
-export const editPiecesAction =
-  (pieces = '', productid = '') =>
-  dispatch => {
-    dispatch({
-      type: EDIT_PIECES,
-      payloadeditpieces: pieces,
-      payloadeditproductid: productid,
-    });
-  };
 
 export const CustomerListAction =
   (userToken = '') =>
@@ -358,6 +485,115 @@ export const CustomerListAction =
     }
   };
 
+export const updataqrdataAction =
+  (userToken = '', id = '', qty = '', price = '', pieces = '', total = '') =>
+  dispatch => {
+    try {
+      dispatch({
+        type: UPDATE_LOADING,
+      });
+
+      var myHeaders = new Headers();
+      myHeaders.append('Authorization', `Bearer ${userToken}`);
+
+      var formdata = new FormData();
+      formdata.append('id', id);
+      formdata.append('qty', qty);
+      formdata.append('price', price);
+      formdata.append('pieces', pieces);
+      formdata.append('total', total);
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: formdata,
+        redirect: 'follow',
+      };
+
+      fetch(
+        'https://nts.dhyaravi.com/outward_ipa/home/update_data',
+        requestOptions,
+      )
+        .then(response => response.json())
+        .then(result => {
+          let serverResponse = result;
+          // dispatch(qrLoadingAction());
+          if (serverResponse) {
+            Toast.show({
+              text1: 'Successfully update',
+              visibilityTime: 3000,
+              autoHide: true,
+              position: 'top',
+              type: 'success',
+            });
+            dispatch({
+              type: UPDATE_QRDATA,
+            });
+            dispatch(getqrdataAction(userToken));
+          } else {
+            dispatch({
+              type: UPDATE_ERROR,
+            });
+            NetInfo.fetch().then(state => {
+              if (state.isConnected) {
+                Toast.show({
+                  text1: serverResponse.message,
+                  visibilityTime: 3000,
+                  autoHide: true,
+                  position: 'top',
+                  type: '',
+                });
+              } else {
+                Toast.show({
+                  text1: 'Check your Internet Connection',
+                  visibilityTime: 3000,
+                  autoHide: true,
+                  position: 'top',
+                  type: 'error',
+                });
+              }
+            });
+            // Toast.show({
+            //   text1: serverResponse.message,
+            //   visibilityTime: 2000,
+            //   autoHide: true,
+            //   position: 'top',
+            //   type: 'error',
+            // });
+          }
+        })
+        .catch(error => {
+          dispatch({
+            type: UPDATE_ERROR,
+          });
+          NetInfo.fetch().then(state => {
+            if (state.isConnected) {
+              Toast.show({
+                text1: 'something wait wrong',
+                visibilityTime: 3000,
+                autoHide: true,
+                position: 'top',
+                type: 'error',
+              });
+            } else {
+              Toast.show({
+                text1: 'Check your Internet Connection',
+                visibilityTime: 3000,
+                autoHide: true,
+                position: 'top',
+                type: 'error',
+              });
+            }
+          });
+        });
+    } catch (err) {
+      dispatch({
+        type: UPDATE_ERROR,
+      });
+      alert(err + '');
+    }
+  };
+
 export const SubmiBillAction =
   (
     tokan = '',
@@ -408,6 +644,7 @@ export const SubmiBillAction =
               type: SUBMIT_BILL,
               payload: serverResponse.success,
             });
+            dispatch(getqrdataAction(tokan));
 
             Toast.show({
               text1: serverResponse.message,
@@ -588,5 +825,99 @@ export const BillReportAction =
       dispatch({
         type: REPORT_ERROR,
       });
+    }
+  };
+
+export const restartBillAction =
+  (userToken = '', userid = '') =>
+  dispatch => {
+    try {
+      dispatch({
+        type: RESTART_LOADING,
+      });
+      var myHeaders = new Headers();
+      myHeaders.append('Authorization', `Bearer ${userToken}`);
+
+      var formdata = new FormData();
+      formdata.append('user_id', userid);
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: formdata,
+        redirect: 'follow',
+      };
+
+      fetch(
+        'https://nts.dhyaravi.com/outward_ipa/home/restart_bill',
+        requestOptions,
+      )
+        .then(response => response.json())
+        .then(result => {
+          let serverResponse = result;
+          if (serverResponse) {
+            dispatch({
+              type: RESTART_BILL,
+            });
+            dispatch(getqrdataAction(userToken));
+            Toast.show({
+              text1: 'successfully restart ',
+              visibilityTime: 3000,
+              autoHide: true,
+              position: 'top',
+              type: 'success',
+            });
+          } else {
+            alert(serverResponse.message);
+            NetInfo.fetch().then(state => {
+              if (state.isConnected) {
+                Toast.show({
+                  text1: 'something wait wrong',
+                  visibilityTime: 3000,
+                  autoHide: true,
+                  position: 'top',
+                  type: 'error',
+                });
+              } else {
+                Toast.show({
+                  text1: 'Check your Internet Connection',
+                  visibilityTime: 3000,
+                  autoHide: true,
+                  position: 'top',
+                  type: 'error',
+                });
+              }
+            });
+          }
+        })
+        .catch(error => {
+          dispatch({
+            type: REPORT_ERROR,
+          });
+          NetInfo.fetch().then(state => {
+            if (state.isConnected) {
+              Toast.show({
+                text1: 'something wait wrong',
+                visibilityTime: 3000,
+                autoHide: true,
+                position: 'top',
+                type: 'error',
+              });
+            } else {
+              Toast.show({
+                text1: 'Check your Internet Connection',
+                visibilityTime: 3000,
+                autoHide: true,
+                position: 'top',
+                type: 'error',
+              });
+            }
+          });
+        });
+    } catch (err) {
+      dispatch({
+        type: REPORT_ERROR,
+      });
+      alert(err + '');
     }
   };
