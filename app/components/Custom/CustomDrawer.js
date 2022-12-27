@@ -56,9 +56,59 @@ const CustomDrawer = props => {
           </Text>
         </ImageBackground> */}
 
-        <View style={{backgroundColor: '#fff'}}>
-          <DrawerItemList {...props} />
+        <View style={{borderColor: 'lightgrey', borderBottomWidth: scale(1)}}>
+          <TouchableNativeFeedback
+            background={TouchableNativeFeedback.Ripple('#9ECED9')}
+            onPress={() => navigation.navigate('CREATE BILL')}>
+            <View
+              style={{
+                paddingHorizontal: scale(10),
+                paddingVertical: verticalScale(8),
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <Text
+                style={{
+                  color: '#000000',
+                  fontSize: verticalScale(15),
+                  fontFamily: 'Cairo-Regular',
+                }}>
+                Create Bill
+              </Text>
+              <Entypo name="chevron-right" size={scale(20)} color="#9ECED9" />
+            </View>
+          </TouchableNativeFeedback>
         </View>
+
+        <View style={{borderColor: 'lightgrey', borderBottomWidth: scale(1)}}>
+          <TouchableNativeFeedback
+            background={TouchableNativeFeedback.Ripple('#9ECED9')}
+            onPress={() => navigation.navigate('BILL REPORT')}>
+            <View
+              style={{
+                paddingHorizontal: scale(10),
+                paddingVertical: verticalScale(8),
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <Text
+                style={{
+                  color: '#000000',
+                  fontSize: verticalScale(15),
+                  fontFamily: 'Cairo-Regular',
+                }}>
+                Bill Report
+              </Text>
+              <Entypo name="chevron-right" size={scale(20)} color="#9ECED9" />
+            </View>
+          </TouchableNativeFeedback>
+        </View>
+
+        {/* <View style={{backgroundColor: '#fff'}}>
+          <DrawerItemList {...props} />
+        </View> */}
       </DrawerContentScrollView>
 
       <View
@@ -77,10 +127,10 @@ const CustomDrawer = props => {
             <Ionicons name="exit-outline" size={scale(22)} color="#333" />
             <Text
               style={{
-                fontSize: scale(15),
+                fontSize: scale(16),
                 marginLeft: scale(5),
                 color: '#333',
-                fontWeight: 'bold',
+                fontFamily: 'Cairo-Black',
               }}>
               log Out
             </Text>
