@@ -37,6 +37,7 @@ import {
   qrListAction,
   qtyincrimentAction,
   restartBillAction,
+  SubmiBillAction,
   toggleCreateBillModelAction,
   togglepriceModelAction,
   toggleQtyModelAction,
@@ -71,19 +72,47 @@ const CreateBill = ({navigation}) => {
   const [isEnabled, setIsEnabled] = useState(true);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
+  // const selectcustomer = () => {
+  //   if (getqrdata.length > 0) {
+  //     dispatch(toggleCreateBillModelAction());
+  //     dispatch(CustomerListAction(Token));
+  //   } else {
+  //     Toast.show({
+  //       text1: 'Please Scan QR',
+  //       visibilityTime: 2000,
+  //       autoHide: true,
+  //       position: 'top',
+  //       type: 'success',
+  //     });
+  //   }
+  // };
+
   const selectcustomer = () => {
-    if (getqrdata.length > 0) {
-      dispatch(toggleCreateBillModelAction());
-      dispatch(CustomerListAction(Token));
-    } else {
-      Toast.show({
-        text1: 'Please Scan QR',
-        visibilityTime: 2000,
-        autoHide: true,
-        position: 'top',
-        type: 'success',
-      });
-    }
+    (async () => {
+      const billdate = await AsyncStorage.getItem('@Bill_Date');
+      const customerid = await AsyncStorage.getItem('@Customer');
+
+      if (billdate && customerid) {
+        getqrdata.map(item =>
+          dispatch(
+            SubmiBillAction(
+              Token,
+              billdate,
+              customerid,
+              item.productid,
+              item.qty,
+              item.pieces,
+              item.price,
+              item.total,
+              item.color,
+            ),
+          ),
+        );
+        dispatch(toggleCreateBillModelAction());
+      } else {
+        Alert.alert('Please Select Customer');
+      }
+    })();
   };
 
   const onchange = async text => {
@@ -101,6 +130,15 @@ const CreateBill = ({navigation}) => {
   useFocusEffect(
     React.useCallback(() => {
       dispatch(getqrdataAction(Token));
+      (async () => {
+        const billdate = await AsyncStorage.getItem('@Bill_Date');
+        const customerid = await AsyncStorage.getItem('@Customer');
+        dispatch(toggleCreateBillModelAction());
+        // if (billdate && customerid) {
+        // } else {
+        //   dispatch(toggleCreateBillModelAction());
+        // }
+      })();
     }, []),
   );
 
@@ -409,6 +447,7 @@ const CreateBill = ({navigation}) => {
                             pieces: item.pieces,
                             qty: item?.qty,
                             editid: item?.id,
+                            item: item,
                           });
                         }}>
                         <Feather
@@ -509,7 +548,7 @@ const CreateBill = ({navigation}) => {
               buttonwidth={scale(330)}
               buttonheight={verticalScale(35)}
               borderradius={scale(5)}
-              text={'SELECT CUSTOMER'}
+              text={'CREATE BILL'}
               fontFamily={'Cairo-Regular'}
               fontcolor={'#333'}
               fontSize={scale(17)}

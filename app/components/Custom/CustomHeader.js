@@ -127,7 +127,7 @@ const CustomHeader = () => {
               marginLeft: scale(10),
               fontFamily: 'Cairo-Regular',
             }}>
-            Qr Scanner
+            Estimate Shreeji
           </Text>
         </View>
       </View>

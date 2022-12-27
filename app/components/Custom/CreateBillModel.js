@@ -25,6 +25,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Toast from 'react-native-toast-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CreateBillModel = ({}) => {
   useEffect(() => {
@@ -222,30 +223,38 @@ const CreateBillModel = ({}) => {
             buttoncolor={'#9ECED9'}
             buttonwidth={scale(120)}
             buttonheight={verticalScale(35)}
-            text={'CREATE BILL'}
+            text={'OK'}
             fontcolor={'white'}
             fontSize={scale(15)}
             onPress={() => {
               if (text && value) {
-                getqrdata.map(item =>
-                  dispatch(
-                    SubmiBillAction(
-                      Token,
-                      text,
-                      value,
-                      item.productid,
-                      item.qty,
-                      item.pieces,
-                      item.price,
-                      item.total,
-                      item.color,
-                    ),
-                  ),
-                );
+                (async () => {
+                  await AsyncStorage.setItem('@Bill_Date', text);
+                  await AsyncStorage.setItem('@Customer', value);
+                })();
                 dispatch(toggleCreateBillModelAction());
-              } else {
-                Alert.alert('Please Select Customer');
               }
+
+              // if (text && value) {
+              //   getqrdata.map(item =>
+              //     dispatch(
+              //       SubmiBillAction(
+              //         Token,
+              //         text,
+              //         value,
+              //         item.productid,
+              //         item.qty,
+              //         item.pieces,
+              //         item.price,
+              //         item.total,
+              //         item.color,
+              //       ),
+              //     ),
+              //   );
+              //   dispatch(toggleCreateBillModelAction());
+              // } else {
+              //   Alert.alert('Please Select Customer');
+              // }
             }}
           />
         </View>

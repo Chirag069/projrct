@@ -878,6 +878,7 @@ export const restartBillAction =
               position: 'top',
               type: 'success',
             });
+            dispatch(toggleCreateBillModelAction());
           } else {
             alert(serverResponse.message);
             NetInfo.fetch().then(state => {

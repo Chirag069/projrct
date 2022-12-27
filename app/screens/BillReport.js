@@ -32,6 +32,10 @@ const BillReport = () => {
     });
   };
 
+  const editBillPress = item => {
+    navigation.navigate('editBill');
+  };
+
   // ************* from date ************** //
 
   const [fromdate, setfromDate] = useState(new Date());
@@ -371,19 +375,20 @@ const BillReport = () => {
                       borderRadius: 5,
                       paddingVertical: verticalScale(5),
                     }}>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                       onPress={() => viewFullPdfPress(item)}
                       style={{
                         position: 'absolute',
                         right: 0,
-                        marginTop: verticalScale(5),
+                        bottom: 0,
+                        marginBottom: verticalScale(5),
                         marginRight: verticalScale(5),
                       }}>
                       <Image
-                        style={{height: scale(25), width: scale(25)}}
+                        style={{height: scale(20), width: scale(20)}}
                         source={require('../assets/Images/pdf-file1.png')}
                       />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
                     <View style={{}}>
                       <View
@@ -403,6 +408,15 @@ const BillReport = () => {
                           {item?.customer}
                         </Text>
                       </View>
+
+                      <View
+                        style={{
+                          marginTop: verticalScale(3),
+                          borderColor: '#E47946',
+                          elevation: 3,
+                          borderWidth: 0.2,
+                        }}
+                      />
 
                       <View
                         style={{
@@ -459,6 +473,43 @@ const BillReport = () => {
                           </Text>
                         </View>
                       </View>
+
+                      {/* <View
+                        style={{
+                          marginTop: verticalScale(3),
+                          borderColor: '#E47946',
+                          borderWidth: scale(0.2),
+                        }}
+                      /> */}
+                    </View>
+
+                    <View
+                      style={{
+                        marginTop: verticalScale(3),
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <TouchableOpacity onPress={() => editBillPress(item)}>
+                        <Text
+                          style={{
+                            color: '#9ECED9',
+                            fontSize: scale(16),
+                            fontWeight: 'bold',
+                          }}>
+                          EDIT BILL
+                        </Text>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity onPress={() => viewFullPdfPress(item)}>
+                        <Text
+                          style={{
+                            color: '#9ECED9',
+                            fontSize: scale(16),
+                            fontWeight: 'bold',
+                          }}>
+                          PDF
+                        </Text>
+                      </TouchableOpacity>
                     </View>
                   </View>
                 );
