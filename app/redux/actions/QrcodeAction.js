@@ -103,7 +103,6 @@ export const qrdataAction =
 
           dispatch(qrLoadingAction());
           if (serverResponse.success) {
-            console.log(serverResponse.sound);
             if (serverResponse.sound == 1) {
               const track = new Sound(serverResponse.sound_link, null, e => {
                 if (e) {

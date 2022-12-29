@@ -33,7 +33,9 @@ const BillReport = () => {
   };
 
   const editBillPress = item => {
-    navigation.navigate('editBill');
+    navigation.navigate('editBill', {
+      item: item,
+    });
   };
 
   // ************* from date ************** //
@@ -417,6 +419,17 @@ const BillReport = () => {
                           borderWidth: 0.2,
                         }}
                       />
+                      <View>
+                        <Text
+                          style={{
+                            alignSelf: 'center',
+                            fontSize: verticalScale(13),
+                            color: 'black',
+                            fontFamily: 'Cairo-Regular',
+                          }}>
+                          {item.date}
+                        </Text>
+                      </View>
 
                       <View
                         style={{
@@ -425,7 +438,7 @@ const BillReport = () => {
                         }}>
                         <View
                           style={{
-                            marginTop: verticalScale(10),
+                            // marginTop: verticalScale(10),
                             justifyContent: 'space-between',
                           }}>
                           <Text
@@ -450,7 +463,7 @@ const BillReport = () => {
 
                         <View
                           style={{
-                            marginTop: verticalScale(10),
+                            // marginTop: verticalScale(10),
                             justifyContent: 'space-between',
                           }}>
                           <Text

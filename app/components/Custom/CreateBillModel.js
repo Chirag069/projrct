@@ -26,6 +26,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {CheckBox} from '@rneui/themed';
 
 const CreateBillModel = ({}) => {
   useEffect(() => {
@@ -53,6 +54,13 @@ const CreateBillModel = ({}) => {
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
   const [text, setText] = useState('Empty');
+  const [check1, setCheck1] = useState(
+    (async () => {
+      const customerid = await AsyncStorage.getItem('@Customer_id');
+      customerid === null ? setCheck1(false) : setCheck1(true);
+      console.log(customerid);
+    })(),
+  );
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -87,6 +95,32 @@ const CreateBillModel = ({}) => {
       // );
     }
     return null;
+  };
+
+  // console.log(value);
+
+  const defaultCustomer = () => {
+    if (value) {
+      setCheck1(!check1);
+      console.log(check1);
+      (async () => {
+        if (check1) {
+          await AsyncStorage.removeItem('@Customer_id');
+        } else {
+          await AsyncStorage.setItem('@Customer_id', value);
+        }
+        const customerid = await AsyncStorage.getItem('@Customer_id');
+        console.log(customerid);
+      })();
+    } else {
+      Toast.show({
+        text1: 'please select customer',
+        visibilityTime: 3000,
+        autoHide: true,
+        position: 'top',
+        type: 'success',
+      });
+    }
   };
 
   return (
@@ -198,10 +232,21 @@ const CreateBillModel = ({}) => {
           />
         </View>
 
+        <View style={{alignSelf: 'flex-start'}}>
+          <CheckBox
+            center
+            title="Default Customer"
+            checked={check1}
+            fontFamily="Cairo-Regular"
+            checkedColor="#9ECED9"
+            onPress={() => defaultCustomer()}
+          />
+        </View>
+
         <View
           style={{
             flexDirection: 'row',
-            marginTop: scale(20),
+
             justifyContent: 'center',
           }}>
           <View style={{marginRight: scale(20)}}>

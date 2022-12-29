@@ -208,7 +208,7 @@ const ProductEdit = () => {
               alignSelf: 'center',
               color: '#000000',
             }}>
-            {qrpieces * qrprice}
+            {(qrpieces * qrprice).toFixed(2)}
           </Text>
         </View>
       </View>

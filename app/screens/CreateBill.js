@@ -90,15 +90,17 @@ const CreateBill = ({navigation}) => {
   const selectcustomer = () => {
     (async () => {
       const billdate = await AsyncStorage.getItem('@Bill_Date');
-      const customerid = await AsyncStorage.getItem('@Customer');
+      const customer = await AsyncStorage.getItem('@Customer');
+      const customerid = await AsyncStorage.getItem('@Customer_id');
+      console.log(customer);
 
-      if (billdate && customerid) {
+      if ((billdate && customerid) || customer) {
         getqrdata.map(item =>
           dispatch(
             SubmiBillAction(
               Token,
               billdate,
-              customerid,
+              customerid ? customerid : customer,
               item.productid,
               item.qty,
               item.pieces,
@@ -108,6 +110,7 @@ const CreateBill = ({navigation}) => {
             ),
           ),
         );
+        await AsyncStorage.removeItem('@Customer');
         dispatch(toggleCreateBillModelAction());
       } else {
         Alert.alert('Please Select Customer');
@@ -193,11 +196,16 @@ const CreateBill = ({navigation}) => {
                   'Restart',
                   'Are you sure you want to restart bill',
                   [
+                    {text: 'Cancel'},
                     {
                       text: 'OK',
-                      onPress: () => dispatch(restartBillAction(Token, userid)),
+                      onPress: () => {
+                        (async () => {
+                          dispatch(restartBillAction(Token, userid));
+                          await AsyncStorage.removeItem('@Customer');
+                        })();
+                      },
                     },
-                    {text: 'Cancel'},
                   ],
                 );
               }}>
@@ -380,12 +388,12 @@ const CreateBill = ({navigation}) => {
                           'Delete',
                           'Are you sure you want to delete item',
                           [
+                            {text: 'Cancel'},
                             {
                               text: 'OK',
                               onPress: () =>
                                 dispatch(deleteqrdataAction(Token, item.id)),
                             },
-                            {text: 'Cancel'},
                           ],
                         );
                       }}>
@@ -552,7 +560,15 @@ const CreateBill = ({navigation}) => {
               fontFamily={'Cairo-Regular'}
               fontcolor={'#333'}
               fontSize={scale(17)}
-              onPress={() => selectcustomer()}
+              onPress={() => {
+                Alert.alert('Submit', 'Are you sure you want to Create bill', [
+                  {text: 'Cancel'},
+                  {
+                    text: 'OK',
+                    onPress: () => selectcustomer(),
+                  },
+                ]);
+              }}
             />
           </View>
         </SafeAreaView>

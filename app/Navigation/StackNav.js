@@ -8,6 +8,7 @@ import PDFExample from '../screens/pdf';
 import PriceModel from '../components/Custom/PriceModel';
 import ProductEdit from '../screens/ProductEdit';
 import editBill from '../screens/editBill';
+import editBillProductUpadte from '../screens/editBillProductUpdate';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,10 @@ const StackNav = () => {
       <Stack.Screen name="PDF" component={PDFExample} />
       <Stack.Screen name="ProductEdit" component={ProductEdit} />
       <Stack.Screen name="editBill" component={editBill} />
+      <Stack.Screen
+        name="editBillProductUpadte"
+        component={editBillProductUpadte}
+      />
     </Stack.Navigator>
   );
 };

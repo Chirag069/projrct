@@ -39,3 +39,14 @@ export const DELETE_ERROR = 'DELETE_ERROR';
 export const RESTART_BILL = 'RESTART_BILL';
 export const RESTART_LOADING = 'RESTART_LOADING';
 export const RESTART_ERROR = 'RESTART_ERROR';
+
+// **************************  edit Bill   *************************************
+
+export const SET_EDITBILL = 'SET_EDITBILL';
+export const GET_EDITBILL = 'GET_EDITBILL';
+export const EDIT_QRLOADING = 'EDIT_QRLOADING';
+export const EDIT_QR_ERROR = 'EDIT_QR_ERROR';
+export const DELETE_EDITBILL = 'DELETE_EDITBILL';
+export const DELETE_EDITBILL_LOADING = 'DELETE_EDITBILL_LOADING';
+export const DELETE_EDITBILL_ERROR = 'DELETE_EDITBILL_ERROR';
+export const EDIT_BILL_UPDATE = 'EDIT_BILL_UPDATE';
