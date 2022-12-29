@@ -26,6 +26,7 @@ import {
   afterEditAction,
   billArrayAction,
   CustomerListAction,
+  defaultCustomerAction,
   deleteqrdataAction,
   editPriceAction,
   editpricepidAction,
@@ -67,32 +68,17 @@ const CreateBill = ({navigation}) => {
     getqrdata,
     deleteloading,
     restartloading,
+    customerid,
   } = useSelector(state => state.qrState);
   const refInput = useRef();
   const [isEnabled, setIsEnabled] = useState(true);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-
-  // const selectcustomer = () => {
-  //   if (getqrdata.length > 0) {
-  //     dispatch(toggleCreateBillModelAction());
-  //     dispatch(CustomerListAction(Token));
-  //   } else {
-  //     Toast.show({
-  //       text1: 'Please Scan QR',
-  //       visibilityTime: 2000,
-  //       autoHide: true,
-  //       position: 'top',
-  //       type: 'success',
-  //     });
-  //   }
-  // };
 
   const selectcustomer = () => {
     (async () => {
       const billdate = await AsyncStorage.getItem('@Bill_Date');
       const customer = await AsyncStorage.getItem('@Customer');
       const customerid = await AsyncStorage.getItem('@Customer_id');
-      console.log(customer);
 
       if ((billdate && customerid) || customer) {
         getqrdata.map(item =>
@@ -133,15 +119,7 @@ const CreateBill = ({navigation}) => {
   useFocusEffect(
     React.useCallback(() => {
       dispatch(getqrdataAction(Token));
-      (async () => {
-        const billdate = await AsyncStorage.getItem('@Bill_Date');
-        const customerid = await AsyncStorage.getItem('@Customer');
-        dispatch(toggleCreateBillModelAction());
-        // if (billdate && customerid) {
-        // } else {
-        //   dispatch(toggleCreateBillModelAction());
-        // }
-      })();
+      dispatch(defaultCustomerAction());
     }, []),
   );
 

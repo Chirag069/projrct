@@ -31,11 +31,13 @@ import {
   UPDATE_ERROR,
   RESTART_BILL,
   RESTART_LOADING,
+  DEFAULT_CUSTOMER,
 } from './types';
 import Toast from 'react-native-toast-message';
 import qrcodeReducer from '../reducers/qrcodeReducer';
 import NetInfo from '@react-native-community/netinfo';
 import Sound from 'react-native-sound';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const qrLoadingAction =
   (loading = false) =>
@@ -932,3 +934,15 @@ export const restartBillAction =
       alert(err + '');
     }
   };
+
+export const defaultCustomerAction = () => dispatch => {
+  (async () => {
+    let customerid = await AsyncStorage.getItem('@Customer_id');
+
+    dispatch({
+      type: DEFAULT_CUSTOMER,
+      payload: customerid,
+    });
+    dispatch(toggleCreateBillModelAction());
+  })();
+};

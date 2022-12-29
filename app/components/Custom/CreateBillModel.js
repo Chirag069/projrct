@@ -18,6 +18,7 @@ import {
   qrdataclearAction,
   SubmiBillAction,
   toggleCreateBillModelAction,
+  defaultCustomerAction,
 } from '../../redux/actions/QrcodeAction';
 import {Dropdown} from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -27,12 +28,13 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {CheckBox} from '@rneui/themed';
+import {useNavigation} from '@react-navigation/native';
 
 const CreateBillModel = ({}) => {
   useEffect(() => {
     onChange();
   }, []);
-
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const {
     CreatebillModalShow,
@@ -44,23 +46,26 @@ const CreateBillModel = ({}) => {
     billprice,
     billtotal,
     getqrdata,
+    defaultcustomer,
   } = useSelector(state => state.qrState);
   const {Token} = useSelector(state => state.authState);
   const {customerlist} = useSelector(state => state.qrState);
-  const [value, setValue] = useState(null);
+
   const [isFocus, setIsFocus] = useState(false);
 
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
   const [text, setText] = useState('Empty');
+
   const [check1, setCheck1] = useState(
     (async () => {
       const customerid = await AsyncStorage.getItem('@Customer_id');
       customerid === null ? setCheck1(false) : setCheck1(true);
-      console.log(customerid);
     })(),
   );
+
+  const [value, setValue] = useState(null);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -84,6 +89,10 @@ const CreateBillModel = ({}) => {
 
   useEffect(() => {
     dispatch(CustomerListAction(Token));
+    (async () => {
+      const customerid = await AsyncStorage.getItem('@Customer_id');
+      setValue(customerid);
+    })();
   }, []);
 
   const renderLabel = () => {
@@ -97,20 +106,16 @@ const CreateBillModel = ({}) => {
     return null;
   };
 
-  // console.log(value);
-
   const defaultCustomer = () => {
     if (value) {
       setCheck1(!check1);
-      console.log(check1);
+
       (async () => {
         if (check1) {
           await AsyncStorage.removeItem('@Customer_id');
         } else {
           await AsyncStorage.setItem('@Customer_id', value);
         }
-        const customerid = await AsyncStorage.getItem('@Customer_id');
-        console.log(customerid);
       })();
     } else {
       Toast.show({

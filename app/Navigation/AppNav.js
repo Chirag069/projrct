@@ -10,6 +10,7 @@ import StackNav from './StackNav';
 import Drawer from '../Navigation/Drawer';
 import AuthStack from './AuthStack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {defaultCustomerAction} from '../redux/actions/QrcodeAction';
 
 const AppNav = () => {
   const dispatch = useDispatch();

@@ -334,8 +334,6 @@ export const editBillUpdateAction =
       //     type: UPDATE_LOADING,
       //   });
 
-      console.log('invoiceid', invoiceid);
-
       var myHeaders = new Headers();
       myHeaders.append('Authorization', `Bearer ${userToken}`);
 

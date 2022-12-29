@@ -31,6 +31,7 @@ import {
   BILL_SUBMIT_ERROR,
   RESTART_LOADING,
   RESTART_ERROR,
+  DEFAULT_CUSTOMER,
 } from '../actions/types';
 
 const initialState = {
@@ -64,6 +65,7 @@ const initialState = {
   pieces: [],
   firstqrdata: [],
   getqrdata: [],
+  defaultcustomer: [],
 };
 
 export default (state = initialState, action) => {
@@ -157,6 +159,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         deleteloading: false,
+      };
+    case DEFAULT_CUSTOMER:
+      return {
+        ...state,
+        defaultcustomer: action.payload,
       };
 
     default:
