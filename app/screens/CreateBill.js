@@ -331,7 +331,7 @@ const CreateBill = ({navigation}) => {
               style={{
                 backgroundColor: '#f5f5f5',
                 alignItems: 'center',
-                paddingVertical: verticalScale(120),
+                paddingVertical: verticalScale(105),
                 paddingBottom: 'auto',
               }}>
               <Image

@@ -26,7 +26,7 @@ const Screen_Width = Dimensions.get('window').width;
 
 const SignupSchema = Yup.object().shape({
   username: Yup.string().required('Please enter username'),
-  password: Yup.string().required('Please enter your password'),
+  password: Yup.string().required('Please enter password'),
 });
 
 const SignIn = () => {
@@ -74,15 +74,25 @@ const SignIn = () => {
         <SafeAreaView style={{backgroundColor: 'white', flex: 1}}>
           <StatusBar backgroundColor={'#FFFFFF'} barStyle="dark-content" />
           <ScrollView>
-            <View style={{alignItems: 'center', marginTop: verticalScale(20)}}>
+            <View
+              style={{
+                alignItems: 'center',
+                marginTop: verticalScale(80),
+                marginBottom: verticalScale(80),
+              }}>
               <Image
-                style={{height: verticalScale(200), width: scale(180)}}
-                source={require('../assets/Images/Logo1.png')}
+                style={{height: scale(47), width: scale(275)}}
+                source={require('../assets/Images/ntsales.png')}
               />
             </View>
             <View style={{alignItems: 'center', marginTop: scale(20)}}>
-              <Text style={{fontSize: scale(20), color: 'black'}}>
-                Customer Sign In
+              <Text
+                style={{
+                  fontSize: scale(25),
+                  color: 'black',
+                  fontFamily: 'Cairo-Regular',
+                }}>
+                Sign In
               </Text>
             </View>
             <View
@@ -92,12 +102,13 @@ const SignIn = () => {
                 marginBottom: verticalScale(5),
               }}>
               <TextInput
-                placeholder="Enter Username"
+                placeholder="Username"
                 placeholderTextColor={'#666666'}
                 activeUnderlineColor={'#000000'}
                 underlineColor="black"
                 autoCapitalize="none"
                 style={{
+                  fontFamily: 'Cairo-Regular',
                   color: '#000000',
                   backgroundColor: 'white',
                   fontSize: scale(15),
@@ -125,6 +136,7 @@ const SignIn = () => {
                 keyboardType="numeric"
                 secureTextEntry={true}
                 style={{
+                  fontFamily: 'Cairo-Regular',
                   color: '#000000',
                   backgroundColor: 'white',
                   fontSize: scale(15),
@@ -148,34 +160,35 @@ const SignIn = () => {
                 text={'SIGN IN'}
                 fontcolor={'white'}
                 fontSize={scale(20)}
+                fontFamily={'Cairo-Black'}
                 onPress={() => {
                   Keyboard.dismiss();
                   userSignIn(values);
                 }}
               />
             </View>
-            <Pressable style={{alignItems: 'center', marginVertical: 10}}>
+            {/* <Pressable style={{alignItems: 'center', marginVertical: 10}}>
               <Text style={{fontSize: scale(12)}}>Forget Password?</Text>
-            </Pressable>
-            <View
+            </Pressable> */}
+            {/* <View
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
                 paddingHorizontal: 20,
               }}>
               <View style={{flex: 1, height: 1, backgroundColor: 'darkgrey'}} />
-            </View>
-            <View
+            </View> */}
+            {/* <View
               style={{
                 alignItems: 'center',
                 flexDirection: 'row',
                 justifyContent: 'center',
                 marginTop: 10,
-              }}>
-              {/* <Pressable
+              }}> */}
+            {/* <Pressable
             onPress={() => navigation.navigate('SignUp')}
             style={{flexDirection: 'row'}}> */}
-              <Text style={{color: 'black', fontSize: scale(12)}}>
+            {/* <Text style={{color: 'black', fontSize: scale(12)}}>
                 You are not a registered use click{' '}
               </Text>
               <Text
@@ -185,9 +198,9 @@ const SignIn = () => {
                   fontSize: scale(12),
                 }}>
                 here
-              </Text>
-              {/* </Pressable> */}
-            </View>
+              </Text> */}
+            {/* </Pressable> */}
+            {/* </View> */}
           </ScrollView>
         </SafeAreaView>
       )}
