@@ -139,12 +139,14 @@ export const geteditqrdataAction =
         .then(response => response.json())
         .then(result => {
           let serverResponse = result;
-
           // dispatch(qrLoadingAction());
           if (serverResponse) {
             dispatch({
               type: GET_EDITBILL,
               payload: serverResponse.data,
+              payloadtq: serverResponse.tq,
+              payloadtp: serverResponse.tp,
+              payloadtt: serverResponse.tt,
             });
           } else {
             // dispatch(qrLoadingAction());

@@ -74,9 +74,8 @@ const editBill = ({navigation}) => {
     deleteloading,
     restartloading,
   } = useSelector(state => state.qrState);
-  const {geteditqrdata, deleteeditbillloading, editqrloading} = useSelector(
-    state => state.editbillState,
-  );
+  const {geteditqrdata, deleteeditbillloading, editqrloading, tq, tp, tt} =
+    useSelector(state => state.editbillState);
   const refInput = useRef();
   const route = useRoute();
   const [isEnabled, setIsEnabled] = useState(false);
@@ -280,6 +279,37 @@ const editBill = ({navigation}) => {
                   setQrcode([]);
                 }}
               />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginTop: verticalScale(10),
+                }}>
+                <Text
+                  style={{
+                    fontSize: verticalScale(13),
+                    color: 'black',
+                    fontFamily: 'Cairo-Regular',
+                  }}>
+                  T-Qty : {tq}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: verticalScale(13),
+                    color: 'black',
+                    fontFamily: 'Cairo-Regular',
+                  }}>
+                  T-Pc: {tp}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: verticalScale(13),
+                    color: 'black',
+                    fontFamily: 'Cairo-Regular',
+                  }}>
+                  Total : {tt}
+                </Text>
+              </View>
             </View>
 
             {deleteeditbillloading ? (
@@ -333,7 +363,7 @@ const editBill = ({navigation}) => {
               }}
               contentContainerStyle={{
                 paddingBottom: verticalScale(10),
-                paddingTop: verticalScale(10),
+                // paddingTop: verticalScale(10),
               }}
               data={geteditqrdata}
               horizontal={false}

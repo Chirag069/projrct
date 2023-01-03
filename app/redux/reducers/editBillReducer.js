@@ -10,6 +10,9 @@ const initialState = {
   geteditqrdata: [],
   deleteeditbillloading: false,
   editqrloading: false,
+  tq: [],
+  tp: [],
+  tt: [],
 };
 
 export default (state = initialState, action) => {
@@ -18,7 +21,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         geteditqrdata: action.payload,
+
         deleteeditbillloading: false,
+        tq: action.payloadtq,
+        tp: action.payloadtp,
+        tt: action.payloadtt,
         editqrloading: false,
       };
     case EDIT_QRLOADING:

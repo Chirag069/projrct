@@ -15,6 +15,9 @@ const initialState = {
   userdata: null,
   Token: null,
   userdata: [],
+  tq: [],
+  tp: [],
+  tt: [],
 };
 
 export default (state = initialState, action) => {
@@ -23,6 +26,9 @@ export default (state = initialState, action) => {
       return {
         ...state,
         Token: action.payload,
+        tq: action.payloadtq,
+        tp: action.payloadtp,
+        tt: action.payloadtt,
         userdata: action.payloaduserdata,
         loggedLoading: false,
         authLoading: false,

@@ -225,6 +225,9 @@ export const getqrdataAction =
             dispatch({
               type: GET_QRDATA,
               payload: serverResponse.data,
+              payloadtq: serverResponse.tq,
+              payloadtp: serverResponse.tp,
+              payloadtt: serverResponse.tt,
             });
           } else {
             // dispatch(qrLoadingAction());

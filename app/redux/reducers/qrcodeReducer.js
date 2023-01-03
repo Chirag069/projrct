@@ -66,6 +66,9 @@ const initialState = {
   firstqrdata: [],
   getqrdata: [],
   defaultcustomer: [],
+  tq: [],
+  tp: [],
+  tt: [],
 };
 
 export default (state = initialState, action) => {
@@ -74,6 +77,9 @@ export default (state = initialState, action) => {
       return {
         ...state,
         getqrdata: action.payload,
+        tq: action.payloadtq,
+        tp: action.payloadtp,
+        tt: action.payloadtt,
         deleteloading: false,
         updateloading: false,
         restartloading: false,

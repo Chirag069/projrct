@@ -69,6 +69,9 @@ const CreateBill = ({navigation}) => {
     deleteloading,
     restartloading,
     customerid,
+    tq,
+    tp,
+    tt,
   } = useSelector(state => state.qrState);
   const refInput = useRef();
   const [isEnabled, setIsEnabled] = useState(true);
@@ -269,6 +272,37 @@ const CreateBill = ({navigation}) => {
                 fontSize={scale(17)}
                 onPress={() => dispatch(getqrdataAction(Token))}
               />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginTop: verticalScale(10),
+                }}>
+                <Text
+                  style={{
+                    fontSize: verticalScale(13),
+                    color: 'black',
+                    fontFamily: 'Cairo-Regular',
+                  }}>
+                  T-Qty : {tq}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: verticalScale(13),
+                    color: 'black',
+                    fontFamily: 'Cairo-Regular',
+                  }}>
+                  T-Pc: {tp}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: verticalScale(13),
+                    color: 'black',
+                    fontFamily: 'Cairo-Regular',
+                  }}>
+                  Total : {tt}
+                </Text>
+              </View>
             </View>
 
             {qrLoading || updateloading || deleteloading ? (
@@ -322,7 +356,6 @@ const CreateBill = ({navigation}) => {
               }}
               contentContainerStyle={{
                 paddingBottom: verticalScale(10),
-                paddingTop: verticalScale(10),
               }}
               data={getqrdata}
               horizontal={false}
